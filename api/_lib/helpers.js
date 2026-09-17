@@ -49,6 +49,9 @@ export async function parseRequestBody(req) {
       return {};
     }
   }
+  if (req.readableEnded || req.complete) {
+    return {};
+  }
   // Stream reading if body is not pre-parsed
   return new Promise((resolve) => {
     let body = '';

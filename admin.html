@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,7 +10,9 @@
   <!-- Google Fonts: Editorial & Architectural Typographies -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="/css/style.css" />
@@ -115,7 +118,8 @@
       gap: 0.35rem;
     }
 
-    .metric-card:hover, .metric-card.active {
+    .metric-card:hover,
+    .metric-card.active {
       border-color: var(--accent-gold);
       background-color: var(--bg-dark-subtle);
       transform: translateY(-2px);
@@ -263,14 +267,53 @@
       border-radius: var(--radius-sm);
     }
 
-    .status-new { background: rgba(229, 169, 60, 0.15); color: #e5a93c; border: 1px solid rgba(229, 169, 60, 0.3); }
-    .status-contacted { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
-    .status-in_progress { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
-    .status-site_visit { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
-    .status-proposal { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
-    .status-converted { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
-    .status-closed { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
-    .status-archived { background: rgba(71, 85, 105, 0.2); color: #64748b; border: 1px solid rgba(71, 85, 105, 0.3); }
+    .status-new {
+      background: rgba(229, 169, 60, 0.15);
+      color: #e5a93c;
+      border: 1px solid rgba(229, 169, 60, 0.3);
+    }
+
+    .status-contacted {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .status-in_progress {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      border: 1px solid rgba(168, 85, 247, 0.3);
+    }
+
+    .status-site_visit {
+      background: rgba(234, 179, 8, 0.15);
+      color: #fde047;
+      border: 1px solid rgba(234, 179, 8, 0.3);
+    }
+
+    .status-proposal {
+      background: rgba(236, 72, 153, 0.15);
+      color: #f472b6;
+      border: 1px solid rgba(236, 72, 153, 0.3);
+    }
+
+    .status-converted {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+
+    .status-closed {
+      background: rgba(100, 116, 139, 0.15);
+      color: #94a3b8;
+      border: 1px solid rgba(100, 116, 139, 0.3);
+    }
+
+    .status-archived {
+      background: rgba(71, 85, 105, 0.2);
+      color: #64748b;
+      border: 1px solid rgba(71, 85, 105, 0.3);
+    }
 
     .priority-badge {
       font-family: var(--font-mono);
@@ -280,9 +323,22 @@
       padding: 0.2rem 0.5rem;
       border-radius: var(--radius-sm);
     }
-    .priority-normal { color: var(--text-muted-dark); }
-    .priority-high { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
-    .priority-urgent { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .priority-normal {
+      color: var(--text-muted-dark);
+    }
+
+    .priority-high {
+      background: rgba(249, 115, 22, 0.15);
+      color: #fb923c;
+      border: 1px solid rgba(249, 115, 22, 0.3);
+    }
+
+    .priority-urgent {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
 
     /* Drawer / Modal Details */
     .detail-drawer {
@@ -381,7 +437,7 @@
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
       z-index: 200;
       transform: translateY(100px);
       opacity: 0;
@@ -403,12 +459,14 @@
       .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
       }
+
       .detail-info-grid {
         grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
+
 <body class="admin-layout">
 
   <!-- ==========================================================================
@@ -428,7 +486,8 @@
         <a href="/" target="_blank" class="btn-outline" style="padding: 0.45rem 0.95rem; font-size: 0.72rem;">
           View Site ↗
         </a>
-        <button id="admin-logout-btn" class="btn-outline" style="padding: 0.45rem 0.95rem; font-size: 0.72rem; border-color: rgba(239, 68, 68, 0.4); color: #f87171;">
+        <button id="admin-logout-btn" class="btn-outline"
+          style="padding: 0.45rem 0.95rem; font-size: 0.72rem; border-color: rgba(239, 68, 68, 0.4); color: #f87171;">
           Sign Out
         </button>
       </div>
@@ -473,7 +532,8 @@
        ========================================================================== -->
   <main class="container" id="admin-dashboard-view" style="display: none; padding-top: 2.5rem; padding-bottom: 4rem;">
     <!-- Title & Export -->
-    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div
+      style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
       <div>
         <div class="section-label">
           <span class="mono-tag">Lead Management</span>
@@ -528,7 +588,10 @@
     <div class="control-bar">
       <div class="control-group-left">
         <div class="search-input-wrap">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
           <input type="text" id="admin-search-input" placeholder="Search by name, email, phone, city..." />
         </div>
 
@@ -588,7 +651,8 @@
           <!-- Populated by JS -->
         </tbody>
       </table>
-      <div id="table-empty-state" style="display: none; padding: 3rem; text-align: center; color: var(--text-muted-dark); font-family: var(--font-mono); font-size: 0.85rem;">
+      <div id="table-empty-state"
+        style="display: none; padding: 3rem; text-align: center; color: var(--text-muted-dark); font-family: var(--font-mono); font-size: 0.85rem;">
         No enquiries yet.
       </div>
     </div>
@@ -602,10 +666,14 @@
     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
       <div>
         <span class="mono-tag" id="drawer-ref-code">KPA-000000</span>
-        <h3 class="editorial-title" id="drawer-client-name" style="font-size: 1.6rem; margin-top: 0.35rem;">Client Name</h3>
+        <h3 class="editorial-title" id="drawer-client-name" style="font-size: 1.6rem; margin-top: 0.35rem;">Client Name
+        </h3>
       </div>
       <button id="drawer-close-btn" class="modal-close-btn" style="position: static;" aria-label="Close Drawer">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
     </div>
 
@@ -656,7 +724,8 @@
 
       <div style="margin-top: 1.25rem;">
         <span class="detail-label">Project Brief / Message</span>
-        <div id="drawer-message" style="margin-top: 0.35rem; background: var(--bg-black); padding: 1rem; border: 1px solid var(--border-dark); font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary-dark); border-radius: var(--radius-sm);">
+        <div id="drawer-message"
+          style="margin-top: 0.35rem; background: var(--bg-black); padding: 1rem; border: 1px solid var(--border-dark); font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary-dark); border-radius: var(--radius-sm);">
           —
         </div>
       </div>
@@ -703,11 +772,13 @@
       <!-- Admin Notes -->
       <div class="form-group" style="margin-top: 1.5rem;">
         <label class="form-label" for="drawer-notes">Internal Admin Notes (Private)</label>
-        <textarea id="drawer-notes" rows="4" class="form-textarea" placeholder="Add confidential notes on client discussion, site constraints, fees, or timeline..."></textarea>
+        <textarea id="drawer-notes" rows="4" class="form-textarea"
+          placeholder="Add confidential notes on client discussion, site constraints, fees, or timeline..."></textarea>
       </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
-        <button id="drawer-delete-btn" class="btn-outline" style="color: #f87171; border-color: rgba(239, 68, 68, 0.4); font-size: 0.75rem; padding: 0.65rem 1rem;">
+        <button id="drawer-delete-btn" class="btn-outline"
+          style="color: #f87171; border-color: rgba(239, 68, 68, 0.4); font-size: 0.75rem; padding: 0.65rem 1rem;">
           Delete Record
         </button>
         <button id="drawer-save-btn" class="btn-primary" style="font-size: 0.78rem; padding: 0.65rem 1.35rem;">
@@ -725,4 +796,5 @@
   <!-- JavaScript -->
   <script type="module" src="/js/admin.js"></script>
 </body>
+
 </html>

@@ -23,23 +23,43 @@ export const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE
 // Server-side secret key: check SUPABASE_SECRET_KEY first, then SUPABASE_SERVICE_ROLE_KEY, then fallback to anon key
 export const supabaseSecretKey = process.env.SUPABASE_SECRET_KEY || 
                                  process.env.SUPABASE_SERVICE_ROLE_KEY || 
-                                 supabaseAnonKey;
+                                 process.env.SUPABASE_ANON_KEY ||
+                                 process.env.VITE_SUPABASE_ANON_KEY ||
+                                 '';
+
+const hasValidSecretKey = Boolean(
+  supabaseSecretKey &&
+  !supabaseSecretKey.includes('your-supabase') &&
+  !supabaseSecretKey.includes('placeholder')
+);
+
+const hasValidAnonKey = Boolean(
+  supabaseAnonKey &&
+  !supabaseAnonKey.includes('your-supabase-anon-key') &&
+  !supabaseAnonKey.includes('placeholder')
+);
 
 export const isSupabaseConfigured = Boolean(
   supabaseUrl && 
   !supabaseUrl.includes('your-project-id') && 
-  (supabaseSecretKey || supabaseAnonKey) && 
-  !supabaseAnonKey.includes('your-supabase-anon-key')
+  !supabaseUrl.includes('placeholder') &&
+  (hasValidSecretKey || hasValidAnonKey)
 );
 
 let cachedSupabase = null;
 let cachedSupabaseAdmin = null;
 
 export function getSupabaseClient() {
-  if (!isSupabaseConfigured) return null;
+  const keyToUse = supabaseAnonKey || supabaseSecretKey;
+  if (!supabaseUrl || !keyToUse || supabaseUrl.includes('your-project-id')) return null;
   if (!cachedSupabase) {
     try {
-      cachedSupabase = createClient(supabaseUrl, supabaseAnonKey);
+      cachedSupabase = createClient(supabaseUrl, keyToUse, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false
+        }
+      });
     } catch (err) {
       console.error('Error initializing public Supabase client:', err);
       return null;
@@ -49,10 +69,16 @@ export function getSupabaseClient() {
 }
 
 export function getSupabaseAdmin() {
-  if (!isSupabaseConfigured) return null;
+  const keyToUse = supabaseSecretKey || supabaseAnonKey;
+  if (!supabaseUrl || !keyToUse || supabaseUrl.includes('your-project-id')) return null;
   if (!cachedSupabaseAdmin) {
     try {
-      cachedSupabaseAdmin = createClient(supabaseUrl, supabaseSecretKey);
+      cachedSupabaseAdmin = createClient(supabaseUrl, keyToUse, {
+        auth: {
+          persistSession: false,
+          autoRefreshToken: false
+        }
+      });
     } catch (err) {
       console.error('Error initializing admin Supabase client:', err);
       return null;

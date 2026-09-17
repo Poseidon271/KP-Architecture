@@ -134,20 +134,28 @@ export default async function handler(req, res) {
       insertedRecord = data;
     } else {
       // Local persistent fallback for development without remote database
-      const localDb = getLocalEnquiries();
-      const nowIso = new Date().toISOString();
-      const localRecord = {
-        id: 'loc-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
-        created_at: nowIso,
-        updated_at: nowIso,
-        ...newEnquiry,
-        status: 'new',
-        priority: 'normal',
-        source: 'website'
-      };
-      localDb.unshift(localRecord);
-      saveLocalEnquiries(localDb);
-      insertedRecord = localRecord;
+      try {
+        const localDb = getLocalEnquiries();
+        const nowIso = new Date().toISOString();
+        const localRecord = {
+          id: 'loc-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
+          created_at: nowIso,
+          updated_at: nowIso,
+          ...newEnquiry,
+          status: 'new',
+          priority: 'normal',
+          source: 'website'
+        };
+        localDb.unshift(localRecord);
+        saveLocalEnquiries(localDb);
+        insertedRecord = localRecord;
+      } catch (localErr) {
+        console.error('Local fallback error:', localErr);
+        return res.status(500).json({
+          success: false,
+          error: 'Unable to save your consultation request. Database connection is not configured.'
+        });
+      }
     }
 
     // 7. Dispatch admin notification email (asynchronous, does not block response)
