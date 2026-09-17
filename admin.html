@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KPA Admin — Project Enquiries Management</title>
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Google Fonts: Editorial & Architectural Typographies -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css" />
+
+  <style>
+    /* Admin Specific Styling */
+    .admin-layout {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--bg-black);
+    }
+
+    .admin-header {
+      background: rgba(16, 16, 18, 0.95);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+
+    .admin-header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .admin-header-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .admin-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      background-color: var(--accent-gold-soft);
+      border: 1px solid var(--accent-gold-border);
+      color: var(--accent-gold);
+      padding: 0.25rem 0.65rem;
+      border-radius: var(--radius-sm);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .admin-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .admin-user-info {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-secondary-dark);
+    }
+
+    /* Auth Screen */
+    .auth-container {
+      max-width: 440px;
+      margin: auto;
+      padding: 3rem 1.5rem;
+      width: 100%;
+    }
+
+    .auth-card {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-dark-strong);
+      padding: 2.5rem 2rem;
+      border-radius: var(--radius-sm);
+      position: relative;
+    }
+
+    .auth-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--accent-gold);
+    }
+
+    /* Metric Counter Cards */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .metric-card {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      padding: 1.25rem 1rem;
+      cursor: pointer;
+      transition: all var(--duration-fast) ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .metric-card:hover, .metric-card.active {
+      border-color: var(--accent-gold);
+      background-color: var(--bg-dark-subtle);
+      transform: translateY(-2px);
+    }
+
+    .metric-count {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .metric-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* Control Bar */
+    .control-bar {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .control-group-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-grow: 1;
+      flex-wrap: wrap;
+    }
+
+    .search-input-wrap {
+      position: relative;
+      min-width: 260px;
+      flex-grow: 1;
+      max-width: 400px;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      background-color: var(--bg-black);
+      border: 1px solid var(--border-dark-strong);
+      color: #ffffff;
+      padding: 0.65rem 1rem 0.65rem 2.25rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .search-input-wrap svg {
+      position: absolute;
+      left: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted-dark);
+    }
+
+    .filter-select {
+      background-color: var(--bg-black);
+      border: 1px solid var(--border-dark-strong);
+      color: #ffffff;
+      padding: 0.65rem 0.95rem;
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Table */
+    .table-container {
+      background-color: var(--bg-dark);
+      border: 1px solid var(--border-dark);
+      overflow-x: auto;
+      margin-bottom: 2rem;
+    }
+
+    .enquiries-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    .enquiries-table th {
+      background-color: var(--bg-black);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-secondary-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 1rem 1.25rem;
+      border-bottom: 1px solid var(--border-dark-strong);
+    }
+
+    .enquiries-table td {
+      padding: 1.1rem 1.25rem;
+      border-bottom: 1px solid var(--border-dark);
+      color: var(--text-secondary-dark);
+    }
+
+    .enquiries-table tr {
+      cursor: pointer;
+      transition: background-color var(--duration-fast) ease;
+    }
+
+    .enquiries-table tr:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+      color: #ffffff;
+    }
+
+    .client-name-cell {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 0.92rem;
+    }
+
+    .client-contact-cell {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-muted-dark);
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.25rem 0.6rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .status-new { background: rgba(229, 169, 60, 0.15); color: #e5a93c; border: 1px solid rgba(229, 169, 60, 0.3); }
+    .status-contacted { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .status-in_progress { background: rgba(168, 85, 247, 0.15); color: #c084fc; border: 1px solid rgba(168, 85, 247, 0.3); }
+    .status-site_visit { background: rgba(234, 179, 8, 0.15); color: #fde047; border: 1px solid rgba(234, 179, 8, 0.3); }
+    .status-proposal { background: rgba(236, 72, 153, 0.15); color: #f472b6; border: 1px solid rgba(236, 72, 153, 0.3); }
+    .status-converted { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.3); }
+    .status-closed { background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); }
+    .status-archived { background: rgba(71, 85, 105, 0.2); color: #64748b; border: 1px solid rgba(71, 85, 105, 0.3); }
+
+    .priority-badge {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.2rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+    .priority-normal { color: var(--text-muted-dark); }
+    .priority-high { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .priority-urgent { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Drawer / Modal Details */
+    .detail-drawer {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 560px;
+      height: 100vh;
+      background-color: var(--bg-dark);
+      border-left: 1px solid var(--border-dark-strong);
+      z-index: 100;
+      overflow-y: auto;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85);
+      transition: right var(--duration-slow) var(--ease-editorial);
+    }
+
+    .detail-drawer.open {
+      right: 0;
+    }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 99;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--duration-normal) ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .detail-section-title {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-dark);
+      padding-bottom: 0.4rem;
+    }
+
+    .detail-info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+
+    .detail-info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .detail-label {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-muted-dark);
+      text-transform: uppercase;
+    }
+
+    .detail-val {
+      font-size: 0.92rem;
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    .detail-val a {
+      color: var(--accent-gold);
+      text-decoration: underline;
+    }
+
+    /* Toast */
+    .admin-toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: var(--bg-dark);
+      border: 1px solid var(--accent-gold);
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      z-index: 200;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all var(--duration-normal) ease;
+    }
+
+    .admin-toast.visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 1100px) {
+      .metrics-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .detail-info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body class="admin-layout">
+
+  <!-- ==========================================================================
+       ADMIN HEADER
+       ========================================================================== -->
+  <header class="admin-header">
+    <div class="container admin-header-inner">
+      <div class="admin-header-left">
+        <a href="/" target="_blank" class="brand-link" aria-label="Visit Website">
+          <img src="/assets/brand/kpa-logo-white.png" alt="K.P. Architects" style="height: 32px;" />
+        </a>
+        <span class="admin-badge">Admin Workspace</span>
+      </div>
+
+      <div class="admin-header-actions" id="admin-header-actions" style="display: none;">
+        <span class="admin-user-info" id="admin-user-email">admin@kparchitects.com</span>
+        <a href="/" target="_blank" class="btn-outline" style="padding: 0.45rem 0.95rem; font-size: 0.72rem;">
+          View Site ↗
+        </a>
+        <button id="admin-logout-btn" class="btn-outline" style="padding: 0.45rem 0.95rem; font-size: 0.72rem; border-color: rgba(239, 68, 68, 0.4); color: #f87171;">
+          Sign Out
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       LOGIN VIEW
+       ========================================================================== -->
+  <div class="auth-container" id="admin-login-view">
+    <div class="auth-card">
+      <div class="section-label" style="margin-bottom: 0.5rem;">
+        <span class="mono-tag">Secure Portal</span>
+      </div>
+      <h2 class="editorial-title" style="font-size: 1.8rem; margin-bottom: 0.5rem;">Admin Access</h2>
+      <p style="color: var(--text-secondary-dark); font-size: 0.85rem; margin-bottom: 2rem;">
+        Sign in to access project enquiries, client briefs, and lead management.
+      </p>
+
+      <form id="admin-login-form">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="login-email" class="form-label">Email Address</label>
+          <input type="email" id="login-email" class="form-input" placeholder="admin@kparchitects.com" required />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="login-password" class="form-label">Password</label>
+          <input type="password" id="login-password" class="form-input" placeholder="••••••••" required />
+        </div>
+
+        <div class="form-error-msg" id="login-error-msg" style="margin-bottom: 1rem;"></div>
+
+        <button type="submit" class="btn-primary" style="width: 100%;" id="login-submit-btn">
+          Sign In to Dashboard →
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN DASHBOARD VIEW
+       ========================================================================== -->
+  <main class="container" id="admin-dashboard-view" style="display: none; padding-top: 2.5rem; padding-bottom: 4rem;">
+    <!-- Title & Export -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <div class="section-label">
+          <span class="mono-tag">Lead Management</span>
+          <div class="section-label-line"></div>
+        </div>
+        <h1 class="editorial-title" style="font-size: clamp(1.8rem, 3vw, 2.6rem);">KPA Project Enquiries</h1>
+      </div>
+
+      <div style="display: flex; gap: 0.75rem;">
+        <button id="admin-refresh-btn" class="btn-outline" style="padding: 0.65rem 1.15rem; font-size: 0.76rem;">
+          ↻ Refresh
+        </button>
+        <button id="admin-export-btn" class="btn-primary" style="padding: 0.65rem 1.25rem; font-size: 0.76rem;">
+          ↓ Export CSV
+        </button>
+      </div>
+    </div>
+
+    <!-- Status Metrics Grid -->
+    <div class="metrics-grid" id="metrics-grid">
+      <div class="metric-card active" data-filter-status="all">
+        <span class="metric-count" id="count-total">0</span>
+        <span class="metric-label">All Enquiries</span>
+      </div>
+      <div class="metric-card" data-filter-status="new">
+        <span class="metric-count" id="count-new" style="color: #e5a93c;">0</span>
+        <span class="metric-label">New</span>
+      </div>
+      <div class="metric-card" data-filter-status="contacted">
+        <span class="metric-count" id="count-contacted" style="color: #60a5fa;">0</span>
+        <span class="metric-label">Contacted</span>
+      </div>
+      <div class="metric-card" data-filter-status="in_progress">
+        <span class="metric-count" id="count-in_progress" style="color: #c084fc;">0</span>
+        <span class="metric-label">In Progress</span>
+      </div>
+      <div class="metric-card" data-filter-status="proposal">
+        <span class="metric-count" id="count-proposal" style="color: #f472b6;">0</span>
+        <span class="metric-label">Proposal</span>
+      </div>
+      <div class="metric-card" data-filter-status="converted">
+        <span class="metric-count" id="count-converted" style="color: #4ade80;">0</span>
+        <span class="metric-label">Converted</span>
+      </div>
+      <div class="metric-card" data-filter-status="closed">
+        <span class="metric-count" id="count-closed" style="color: #94a3b8;">0</span>
+        <span class="metric-label">Closed</span>
+      </div>
+    </div>
+
+    <!-- Controls: Search, Filters, Sorting -->
+    <div class="control-bar">
+      <div class="control-group-left">
+        <div class="search-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="admin-search-input" placeholder="Search by name, email, phone, city..." />
+        </div>
+
+        <select id="filter-status-select" class="filter-select">
+          <option value="all">Status: All</option>
+          <option value="new">New</option>
+          <option value="contacted">Contacted</option>
+          <option value="in_progress">In Progress</option>
+          <option value="site_visit">Site Visit</option>
+          <option value="proposal">Proposal</option>
+          <option value="converted">Converted</option>
+          <option value="closed">Closed</option>
+          <option value="archived">Archived</option>
+        </select>
+
+        <select id="filter-priority-select" class="filter-select">
+          <option value="all">Priority: All</option>
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="urgent">Urgent</option>
+        </select>
+
+        <select id="filter-type-select" class="filter-select">
+          <option value="all">Typology: All</option>
+          <option value="Architecture">Architecture</option>
+          <option value="Commercial">Commercial</option>
+          <option value="Hospitality">Hospitality</option>
+          <option value="Residential">Residential</option>
+          <option value="Retail">Retail</option>
+          <option value="Adaptive">Adaptive Reuse</option>
+        </select>
+      </div>
+
+      <div>
+        <select id="sort-order-select" class="filter-select">
+          <option value="desc">Sort: Newest First</option>
+          <option value="asc">Sort: Oldest First</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Enquiries Data Table -->
+    <div class="table-container">
+      <table class="enquiries-table">
+        <thead>
+          <tr>
+            <th>Client Name</th>
+            <th>Project Typology</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Submitted</th>
+            <th>Ref Code</th>
+          </tr>
+        </thead>
+        <tbody id="enquiries-table-body">
+          <!-- Populated by JS -->
+        </tbody>
+      </table>
+      <div id="table-empty-state" style="display: none; padding: 3rem; text-align: center; color: var(--text-muted-dark); font-family: var(--font-mono); font-size: 0.85rem;">
+        No enquiries yet.
+      </div>
+    </div>
+  </main>
+
+  <!-- ==========================================================================
+       ENQUIRY DETAIL DRAWER
+       ========================================================================== -->
+  <div class="drawer-backdrop" id="detail-drawer-backdrop"></div>
+  <aside class="detail-drawer" id="detail-drawer" aria-label="Enquiry Details">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <span class="mono-tag" id="drawer-ref-code">KPA-000000</span>
+        <h3 class="editorial-title" id="drawer-client-name" style="font-size: 1.6rem; margin-top: 0.35rem;">Client Name</h3>
+      </div>
+      <button id="drawer-close-btn" class="modal-close-btn" style="position: static;" aria-label="Close Drawer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </button>
+    </div>
+
+    <!-- Client & Contact Info -->
+    <div>
+      <div class="detail-section-title">Client Information</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item">
+          <span class="detail-label">Email Address</span>
+          <span class="detail-val" id="drawer-email">name@example.com</span>
+        </div>
+        <div class="detail-info-item">
+          <span class="detail-label">Phone Number</span>
+          <span class="detail-val" id="drawer-phone">+91 9876543210</span>
+        </div>
+        <div class="detail-info-item">
+          <span class="detail-label">Organization</span>
+          <span class="detail-val" id="drawer-org">—</span>
+        </div>
+        <div class="detail-info-item">
+          <span class="detail-label">Submitted Timestamp</span>
+          <span class="detail-val" id="drawer-created">Date</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Project Information -->
+    <div>
+      <div class="detail-section-title">Project Details</div>
+      <div class="detail-info-grid">
+        <div class="detail-info-item">
+          <span class="detail-label">Typology</span>
+          <span class="detail-val" id="drawer-type">Architecture</span>
+        </div>
+        <div class="detail-info-item">
+          <span class="detail-label">Location</span>
+          <span class="detail-val" id="drawer-location">Lucknow</span>
+        </div>
+        <div class="detail-info-item" style="grid-column: 1 / -1;">
+          <span class="detail-label">Disciplines</span>
+          <span class="detail-val" id="drawer-disciplines">—</span>
+        </div>
+        <div class="detail-info-item" style="grid-column: 1 / -1;">
+          <span class="detail-label">Built-up Scale</span>
+          <span class="detail-val" id="drawer-scale">—</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.25rem;">
+        <span class="detail-label">Project Brief / Message</span>
+        <div id="drawer-message" style="margin-top: 0.35rem; background: var(--bg-black); padding: 1rem; border: 1px solid var(--border-dark); font-size: 0.88rem; line-height: 1.6; color: var(--text-secondary-dark); border-radius: var(--radius-sm);">
+          —
+        </div>
+      </div>
+    </div>
+
+    <!-- Lead Status & Management -->
+    <div>
+      <div class="detail-section-title">Lead Management & Workflow</div>
+      <div class="detail-info-grid">
+        <div class="form-group">
+          <label class="form-label" for="drawer-status-select">Current Status</label>
+          <select id="drawer-status-select" class="form-select">
+            <option value="new">New</option>
+            <option value="contacted">Contacted</option>
+            <option value="in_progress">In Progress</option>
+            <option value="site_visit">Site Visit</option>
+            <option value="proposal">Proposal Sent</option>
+            <option value="converted">Converted / Won</option>
+            <option value="closed">Closed</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="drawer-priority-select">Priority Level</label>
+          <select id="drawer-priority-select" class="form-select">
+            <option value="normal">Normal</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+        <button id="btn-quick-contacted" class="btn-outline" style="padding: 0.45rem 0.75rem; font-size: 0.7rem;">
+          ✓ Mark Contacted Today
+        </button>
+        <button id="btn-quick-proposal" class="btn-outline" style="padding: 0.45rem 0.75rem; font-size: 0.7rem;">
+          📄 Mark Proposal Sent
+        </button>
+      </div>
+
+      <!-- Admin Notes -->
+      <div class="form-group" style="margin-top: 1.5rem;">
+        <label class="form-label" for="drawer-notes">Internal Admin Notes (Private)</label>
+        <textarea id="drawer-notes" rows="4" class="form-textarea" placeholder="Add confidential notes on client discussion, site constraints, fees, or timeline..."></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem;">
+        <button id="drawer-delete-btn" class="btn-outline" style="color: #f87171; border-color: rgba(239, 68, 68, 0.4); font-size: 0.75rem; padding: 0.65rem 1rem;">
+          Delete Record
+        </button>
+        <button id="drawer-save-btn" class="btn-primary" style="font-size: 0.78rem; padding: 0.65rem 1.35rem;">
+          Save Updates →
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Admin Toast -->
+  <div class="admin-toast" id="admin-toast">
+    <span id="toast-message">Record updated</span>
+  </div>
+
+  <!-- JavaScript -->
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

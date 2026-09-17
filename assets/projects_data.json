@@ -1,0 +1,412 @@
+[
+  {
+    "id": "hotel-clarks",
+    "title": "Hotel Clarks (7 Credence)",
+    "category": "Hospitality / Commercial",
+    "categoryKey": "hospitality",
+    "location": "Ayodhya",
+    "pages": [
+      5,
+      6
+    ],
+    "highlight": "Luxury hospitality concept designed for pilgrims and tourists in sacred Ayodhya.",
+    "featured": true,
+    "tag": "Featured 01",
+    "images": [
+      "assets/projects/hotel-clarks/img_p5_1.jpg",
+      "assets/projects/hotel-clarks/img_p6_1.jpg",
+      "assets/projects/hotel-clarks/img_p6_2.jpg",
+      "assets/projects/hotel-clarks/img_p6_3.jpg",
+      "assets/projects/hotel-clarks/img_p6_4.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_05.jpg",
+      "assets/pages/page_06.jpg"
+    ],
+    "hero_image": "assets/projects/hotel-clarks/img_p5_1.jpg"
+  },
+  {
+    "id": "lps-headoffice",
+    "title": "Lucknow Public School Head Office",
+    "category": "Institutional / Commercial",
+    "categoryKey": "institutional",
+    "location": "Eldeco, Southcity, Lucknow",
+    "pages": [
+      7
+    ],
+    "highlight": "Administrative landmark balancing institutional dignity with modern corporate aesthetics.",
+    "featured": true,
+    "tag": "Featured 02",
+    "images": [
+      "assets/projects/lps-headoffice/img_p7_1.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_07.jpg"
+    ],
+    "hero_image": "assets/projects/lps-headoffice/img_p7_1.jpg"
+  },
+  {
+    "id": "the-glory-resort",
+    "title": "The Glory Resort",
+    "category": "Hospitality / Resort",
+    "categoryKey": "hospitality",
+    "location": "Chandrikadevi, Lucknow",
+    "pages": [
+      8,
+      9,
+      10
+    ],
+    "highlight": "Expansive landscape and resort architecture seamlessly integrating leisure amenities with nature.",
+    "featured": true,
+    "tag": "Featured 03",
+    "images": [
+      "assets/projects/the-glory-resort/img_p8_1.jpg",
+      "assets/projects/the-glory-resort/img_p9_1.jpg",
+      "assets/projects/the-glory-resort/img_p9_2.jpg",
+      "assets/projects/the-glory-resort/img_p9_3.jpg",
+      "assets/projects/the-glory-resort/img_p9_4.jpg",
+      "assets/projects/the-glory-resort/img_p10_1.jpg",
+      "assets/projects/the-glory-resort/img_p10_2.jpg",
+      "assets/projects/the-glory-resort/img_p10_3.jpg",
+      "assets/projects/the-glory-resort/img_p10_4.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_08.jpg",
+      "assets/pages/page_09.jpg",
+      "assets/pages/page_10.jpg"
+    ],
+    "hero_image": "assets/projects/the-glory-resort/img_p8_1.jpg"
+  },
+  {
+    "id": "resort-naimish",
+    "title": "Resort Naimish",
+    "category": "Hospitality / Landscape",
+    "categoryKey": "hospitality",
+    "location": "Naimish, Sitapur",
+    "pages": [
+      11,
+      12
+    ],
+    "highlight": "Serene destination resort drawing architectural inspiration from contemporary regional textures.",
+    "featured": true,
+    "tag": "Featured 04",
+    "images": [
+      "assets/projects/resort-naimish/img_p11_1.jpg",
+      "assets/projects/resort-naimish/img_p12_1.jpg",
+      "assets/projects/resort-naimish/img_p12_2.jpg",
+      "assets/projects/resort-naimish/img_p12_3.jpg",
+      "assets/projects/resort-naimish/img_p12_4.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_11.jpg",
+      "assets/pages/page_12.jpg"
+    ],
+    "hero_image": "assets/projects/resort-naimish/img_p11_1.jpg"
+  },
+  {
+    "id": "resort-dudhwa",
+    "title": "Resort Dudhwa",
+    "category": "Hospitality / Eco-Resort",
+    "categoryKey": "hospitality",
+    "location": "Dudhwa, Palia",
+    "pages": [
+      13,
+      14
+    ],
+    "highlight": "Eco-sensitive hospitality situated alongside pristine forest sanctuary edges.",
+    "featured": true,
+    "tag": "Featured 05",
+    "images": [
+      "assets/projects/resort-dudhwa/img_p13_1.jpg",
+      "assets/projects/resort-dudhwa/img_p14_1.jpg",
+      "assets/projects/resort-dudhwa/img_p14_2.jpg",
+      "assets/projects/resort-dudhwa/img_p14_3.jpg",
+      "assets/projects/resort-dudhwa/img_p14_4.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_13.jpg",
+      "assets/pages/page_14.jpg"
+    ],
+    "hero_image": "assets/projects/resort-dudhwa/img_p13_1.jpg"
+  },
+  {
+    "id": "food-court-sidhauli",
+    "title": "Highway Food Court",
+    "category": "Commercial / Retail",
+    "categoryKey": "commercial",
+    "location": "Sidhauli",
+    "pages": [
+      15,
+      16
+    ],
+    "highlight": "High-throughput culinary destination with streamlined pedestrian circulation.",
+    "featured": false,
+    "tag": "Commercial",
+    "images": [
+      "assets/projects/food-court-sidhauli/img_p15_1.jpg",
+      "assets/projects/food-court-sidhauli/img_p16_1.jpg",
+      "assets/projects/food-court-sidhauli/img_p16_2.jpg",
+      "assets/projects/food-court-sidhauli/img_p16_3.jpg",
+      "assets/projects/food-court-sidhauli/img_p16_4.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_15.jpg",
+      "assets/pages/page_16.jpg"
+    ],
+    "hero_image": "assets/projects/food-court-sidhauli/img_p15_1.jpg"
+  },
+  {
+    "id": "food-court-ayodhya",
+    "title": "Ayodhya Food Court",
+    "category": "Commercial / Retail",
+    "categoryKey": "commercial",
+    "location": "Ayodhya",
+    "pages": [
+      17,
+      18
+    ],
+    "highlight": "Modern dining hub structured for volume and architectural vitality.",
+    "featured": false,
+    "tag": "Commercial",
+    "images": [
+      "assets/projects/food-court-ayodhya/img_p17_1.jpg",
+      "assets/projects/food-court-ayodhya/img_p18_1.jpg",
+      "assets/projects/food-court-ayodhya/img_p18_2.jpg",
+      "assets/projects/food-court-ayodhya/img_p18_3.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_17.jpg",
+      "assets/pages/page_18.jpg"
+    ],
+    "hero_image": "assets/projects/food-court-ayodhya/img_p17_1.jpg"
+  },
+  {
+    "id": "weather-point",
+    "title": "The Weather Point",
+    "category": "Commercial / Dining",
+    "categoryKey": "commercial",
+    "location": "Lucknow",
+    "pages": [
+      19,
+      20
+    ],
+    "highlight": "Iconic restaurant architecture featuring expressive structural framing and open-air decks.",
+    "featured": true,
+    "tag": "Featured 06",
+    "images": [
+      "assets/projects/weather-point/img_p19_1.jpg",
+      "assets/projects/weather-point/img_p20_1.jpg",
+      "assets/projects/weather-point/img_p20_2.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_19.jpg",
+      "assets/pages/page_20.jpg"
+    ],
+    "hero_image": "assets/projects/weather-point/img_p19_1.jpg"
+  },
+  {
+    "id": "hons",
+    "title": "HONS Dining & Lounge",
+    "category": "Adaptive Reuse / Interiors",
+    "categoryKey": "adaptive-reuse",
+    "location": "Hazratganj, Lucknow",
+    "pages": [
+      22,
+      23
+    ],
+    "highlight": "Heritage transformation into an upscale lounge blending original structural charm with contemporary luxury.",
+    "featured": true,
+    "tag": "Adaptive Reuse",
+    "images": [
+      "assets/projects/hons/img_p22_1.jpg",
+      "assets/projects/hons/img_p23_1.jpg",
+      "assets/projects/hons/img_p23_2.jpg",
+      "assets/projects/hons/img_p23_3.jpg",
+      "assets/projects/hons/img_p23_4.jpg",
+      "assets/projects/hons/img_p23_5.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_22.jpg",
+      "assets/pages/page_23.jpg"
+    ],
+    "hero_image": "assets/projects/hons/img_p22_1.jpg"
+  },
+  {
+    "id": "baristro",
+    "title": "BARISTRO Cafe & Bar",
+    "category": "Adaptive Reuse / Interiors",
+    "categoryKey": "adaptive-reuse",
+    "location": "Hazratganj, Lucknow",
+    "pages": [
+      24,
+      25
+    ],
+    "highlight": "Atmospheric interior revitalization balancing industrial chic with classic brick arches.",
+    "featured": true,
+    "tag": "Adaptive Reuse",
+    "images": [
+      "assets/projects/baristro/img_p24_1.jpg",
+      "assets/projects/baristro/img_p25_1.jpg",
+      "assets/projects/baristro/img_p25_2.jpg",
+      "assets/projects/baristro/img_p25_3.jpg",
+      "assets/projects/baristro/img_p25_4.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_24.jpg",
+      "assets/pages/page_25.jpg"
+    ],
+    "hero_image": "assets/projects/baristro/img_p24_1.jpg"
+  },
+  {
+    "id": "yuvraj-palace",
+    "title": "Yuvraj Palace Banquet",
+    "category": "Adaptive Reuse / Hospitality",
+    "categoryKey": "adaptive-reuse",
+    "location": "Lakhimpur-Kheri",
+    "pages": [
+      26,
+      27
+    ],
+    "highlight": "Grand banquet and celebration palace preserving palatial rhythm and majestic proportions.",
+    "featured": false,
+    "tag": "Adaptive Reuse",
+    "images": [
+      "assets/projects/yuvraj-palace/img_p26_1.jpg",
+      "assets/projects/yuvraj-palace/img_p27_1.jpg",
+      "assets/projects/yuvraj-palace/img_p27_2.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_26.jpg",
+      "assets/pages/page_27.jpg"
+    ],
+    "hero_image": "assets/projects/yuvraj-palace/img_p26_1.jpg"
+  },
+  {
+    "id": "fosho",
+    "title": "FO\u2019SHO Restobar",
+    "category": "Adaptive Reuse / Interiors",
+    "categoryKey": "adaptive-reuse",
+    "location": "Hazratganj, Lucknow",
+    "pages": [
+      28,
+      29
+    ],
+    "highlight": "Vibrant dining destination celebrating rich textures, sculptural ceilings, and ambient lighting.",
+    "featured": true,
+    "tag": "Adaptive Reuse",
+    "images": [
+      "assets/projects/fosho/img_p28_1.jpg",
+      "assets/projects/fosho/img_p29_1.jpg",
+      "assets/projects/fosho/img_p29_2.jpg",
+      "assets/projects/fosho/img_p29_3.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_28.jpg",
+      "assets/pages/page_29.jpg"
+    ],
+    "hero_image": "assets/projects/fosho/img_p28_1.jpg"
+  },
+  {
+    "id": "hi-rise-buildings",
+    "title": "Imperial Heights & Sri Krishna Villas",
+    "category": "High Rise / Residential",
+    "categoryKey": "high-rise",
+    "location": "Meerut & Varanasi",
+    "pages": [
+      30,
+      31
+    ],
+    "highlight": "Curated high-rise developments reshaping skyline living through functional vertical innovation.",
+    "featured": true,
+    "tag": "High Rise",
+    "images": [
+      "assets/projects/hi-rise-buildings/img_p30_1.jpg",
+      "assets/projects/hi-rise-buildings/img_p30_2.jpg",
+      "assets/projects/hi-rise-buildings/img_p31_1.jpg",
+      "assets/projects/hi-rise-buildings/img_p31_2.jpg",
+      "assets/projects/hi-rise-buildings/img_p31_3.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_30.jpg",
+      "assets/pages/page_31.jpg"
+    ],
+    "hero_image": "assets/projects/hi-rise-buildings/img_p30_1.jpg"
+  },
+  {
+    "id": "skyy-living",
+    "title": "SKYY LIVING",
+    "category": "Retail / Commercial",
+    "categoryKey": "retail",
+    "location": "Lucknow",
+    "pages": [
+      33,
+      34
+    ],
+    "highlight": "Contemporary mixed retail and lifestyle architecture emphasizing sleek facade rhythm.",
+    "featured": true,
+    "tag": "Retail",
+    "images": [
+      "assets/projects/skyy-living/img_p33_1.jpg",
+      "assets/projects/skyy-living/img_p34_1.jpg",
+      "assets/projects/skyy-living/img_p34_2.jpg",
+      "assets/projects/skyy-living/img_p34_3.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_33.jpg",
+      "assets/pages/page_34.jpg"
+    ],
+    "hero_image": "assets/projects/skyy-living/img_p33_1.jpg"
+  },
+  {
+    "id": "mogs",
+    "title": "MOGS Fashion Boutique",
+    "category": "Retail / Commercial Interiors",
+    "categoryKey": "retail",
+    "location": "Hazratganj, Lucknow",
+    "pages": [
+      35,
+      36
+    ],
+    "highlight": "High-street fashion retail interior with bespoke display millwork and warm architectural lighting.",
+    "featured": false,
+    "tag": "Retail",
+    "images": [
+      "assets/projects/mogs/img_p35_1.jpg",
+      "assets/projects/mogs/img_p36_1.jpg",
+      "assets/projects/mogs/img_p36_2.jpg",
+      "assets/projects/mogs/img_p36_3.jpg",
+      "assets/projects/mogs/img_p36_4.jpg",
+      "assets/projects/mogs/img_p36_5.jpg",
+      "assets/projects/mogs/img_p36_6.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_35.jpg",
+      "assets/pages/page_36.jpg"
+    ],
+    "hero_image": "assets/projects/mogs/img_p35_1.jpg"
+  },
+  {
+    "id": "lal-babu-jewellers",
+    "title": "Lal Babu Jewellers",
+    "category": "Retail / Luxury Commercial",
+    "categoryKey": "retail",
+    "location": "Lakhimpur-Kheri",
+    "pages": [
+      37,
+      38
+    ],
+    "highlight": "Prestigious flagship jewellery showroom radiating elegance, security, and timeless grandeur.",
+    "featured": true,
+    "tag": "Retail",
+    "images": [
+      "assets/projects/lal-babu-jewellers/img_p37_1.jpg",
+      "assets/projects/lal-babu-jewellers/img_p38_1.jpg",
+      "assets/projects/lal-babu-jewellers/img_p38_2.jpg"
+    ],
+    "page_renders": [
+      "assets/pages/page_37.jpg",
+      "assets/pages/page_38.jpg"
+    ],
+    "hero_image": "assets/projects/lal-babu-jewellers/img_p37_1.jpg"
+  }
+]
