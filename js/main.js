@@ -132,7 +132,22 @@ function renderProjectsCarousel() {
           class="project-card-img" 
           loading="${idx < 3 ? 'eager' : 'lazy'}"
         />
-        <div class="project-card-hover-action">Explore Case Study →</div>
+
+        <!-- Subtle Technical Sketch Hover Overlay -->
+        <div class="project-card-drafting-overlay">
+          <div class="overlay-grid-marks"></div>
+          <div class="overlay-drafting-top">
+            <span>DRAFT // ${proj.indexNumber || String(idx + 1).padStart(2, '0')}</span>
+            <span>${proj.category.split('/')[0].trim()}</span>
+          </div>
+          <div class="overlay-drafting-bottom">
+            <div style="display: flex; justify-content: space-between; font-size: 0.68rem; color: rgba(255,255,255,0.8);">
+              <span>SEC 0${(idx % 4) + 1}</span>
+              <span>1:100 SCALE</span>
+            </div>
+            <div class="project-card-hover-action" style="position: static; margin-top: 0.4rem;">Explore Case Study →</div>
+          </div>
+        </div>
       </div>
       <div class="project-card-body">
         <div class="project-meta-row">
@@ -249,15 +264,44 @@ function renderServices() {
   const container = document.getElementById('services-pillars-grid');
   if (!container) return;
 
+  const sketchMap = {
+    '01': '/assets/sketch_assets/ad1.png',
+    '02': '/assets/sketch_assets/sd1.png',
+    '03': '/assets/sketch_assets/id1.png'
+  };
+
+  const annotationMap = {
+    '01': 'MASTERPLANNING // ZONING // 3D SPATIAL',
+    '02': 'LOAD CALCULATION // SEISMIC // IS 456',
+    '03': 'BESPOKE MILLWORK // ERGONOMICS // TURNKEY'
+  };
+
   container.innerHTML = KPA_DATA.services.map(s => `
     <div class="service-pillar-card">
       <div class="pillar-top">
-        <div class="pillar-number">${s.num}</div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div class="pillar-number">${s.num}</div>
+          <span class="eng-tag eng-tag-orange" style="font-size: 0.65rem; padding: 0.15rem 0.5rem;">CORE DISCIPLINE</span>
+        </div>
+
+        <!-- Technical Sketch Box from PDF Reference -->
+        <div class="service-pillar-sketch-box">
+          <span class="sketch-corner-tick tick-tl"></span>
+          <span class="sketch-corner-tick tick-tr"></span>
+          <span class="sketch-corner-tick tick-bl"></span>
+          <span class="sketch-corner-tick tick-br"></span>
+          <img src="${sketchMap[s.num] || '/assets/sketch_assets/lineart_page_1.webp'}" alt="${s.title} Technical Sketch" loading="lazy" />
+        </div>
+
+        <div class="dimension-marker" style="margin-bottom: 1rem;">
+          <span style="font-size: 0.65rem;">${annotationMap[s.num] || 'TECHNICAL SCOPE'}</span>
+        </div>
+
         <h3 class="pillar-title">${s.title}</h3>
         <div class="pillar-tagline">${s.tagline}</div>
         <p class="pillar-desc">${s.description}</p>
       </div>
-      <div class="pillar-scope-list">
+      <div class="pillar-scope-list" style="margin-top: 1.5rem;">
         ${s.scope.map(item => `<div class="scope-item">${item}</div>`).join('')}
       </div>
     </div>

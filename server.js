@@ -380,20 +380,25 @@ app.post('/api/admin/auth/login', async (req, res) => {
       }
     }
 
-    // 2. Fallback to built-in admin credentials
-    if ((email === 'admin@kparchitects.com' || email === 'architects.kpa@gmail.com') && password === 'kpa2012admin') {
-      const session = {
-        access_token: 'kpa_session_' + Date.now(),
-        user: { email: email, role: 'authenticated_admin' }
-      };
-      return res.json({
-        success: true,
-        session,
-        user: session.user
-      });
+    // 2. Server-side environment variable authentication (if configured in env)
+    const envAdminPassword = process.env.ADMIN_PASSWORD;
+    const envAdminEmail = process.env.ADMIN_EMAIL;
+
+    if (envAdminPassword && password === envAdminPassword) {
+      if (!envAdminEmail || email.toLowerCase() === envAdminEmail.toLowerCase()) {
+        const session = {
+          access_token: 'kpa_session_' + Date.now(),
+          user: { email: email, role: 'authenticated_admin' }
+        };
+        return res.json({
+          success: true,
+          session,
+          user: session.user
+        });
+      }
     }
 
-    return res.status(400).json({ success: false, error: 'Invalid email or password.' });
+    return res.status(401).json({ success: false, error: 'Invalid email or password.' });
   } catch (err) {
     console.error('Login error:', err);
     return res.status(500).json({ success: false, error: 'Server error during login authentication.' });

@@ -513,6 +513,7 @@ export const KPA_DATA = {
     {
       num: "01",
       title: "ARCHITECTURAL DESIGN",
+      image: "/assets/sketch_assets/ad1.png",
       tagline: "Complete Architectural Solution.",
       description: "Comprehensive end-to-end architectural design for commercial, residential, hospitality, retail, and institutional developments. We craft forward-thinking environments with futuristic designs inspired by nature and grounded in practical constructability.",
       scope: [
@@ -526,6 +527,7 @@ export const KPA_DATA = {
     {
       num: "02",
       title: "STRUCTURE DESIGN",
+      image: "/assets/sketch_assets/sd1.png",
       tagline: "Structure Design & Detailing of RCC & Steel Structures.",
       description: "Full-spectrum structural engineering and analysis for low-rise, high-rise, long-span, and complex industrial structures. Our in-house structural engineers ensure maximum seismic safety, economy of materials, and precision detailing.",
       scope: [
@@ -539,6 +541,7 @@ export const KPA_DATA = {
     {
       num: "03",
       title: "INTERIOR DESIGN",
+      image: "/assets/sketch_assets/id1.png",
       tagline: "Design & Turnkey Execution of Commercial & Residential Projects.",
       description: "Bespoke interior architecture that blends luxury, tactile materiality, and spatial ergonomics. From high-street retail and fine dining to executive offices and luxury residences, we manage concept through turnkey handover.",
       scope: [

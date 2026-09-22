@@ -37,6 +37,7 @@
         <a href="#work" class="nav-link">Work</a>
         <a href="#about" class="nav-link">About</a>
         <a href="#services" class="nav-link">Services</a>
+        <a href="#structure-engineering" class="nav-link" style="color: var(--eng-orange);">Engineering</a>
         <a href="#categories" class="nav-link">Categories</a>
         <a href="#stories" class="nav-link">Stories</a>
         <a href="#process" class="nav-link">Process</a>
@@ -64,6 +65,7 @@
         <a href="#work" class="mobile-nav-link">Work</a>
         <a href="#about" class="mobile-nav-link">About</a>
         <a href="#services" class="mobile-nav-link">Services</a>
+        <a href="#structure-engineering" class="mobile-nav-link" style="color: var(--eng-orange);">Engineering</a>
         <a href="#categories" class="mobile-nav-link">Categories</a>
         <a href="#stories" class="mobile-nav-link">Stories</a>
         <a href="#process" class="mobile-nav-link">Process</a>
@@ -90,6 +92,7 @@
         <div class="hero-left">
           <div class="hero-badge-wrap">
             <span class="mono-tag">Contemporary Architectural Practice</span>
+            <span class="eng-tag eng-tag-orange" style="font-size: 0.68rem; padding: 0.2rem 0.55rem;">ESTD. 2012 · LKO</span>
           </div>
 
           <h1 class="hero-headline">
@@ -104,13 +107,16 @@
             <a href="#work" class="btn-primary">
               Explore Selected Work <span class="btn-arrow">→</span>
             </a>
-            <a href="#about" class="btn-outline">
-              Our Legacy & Practice
+            <a href="#structure-engineering" class="btn-outline" style="border-color: rgba(234, 84, 1, 0.4);">
+              Engineering System →
             </a>
           </div>
         </div>
 
-        <div class="hero-visual-frame">
+        <div class="hero-visual-frame" style="position: relative;">
+          <!-- Subtle engineering sketch backdrop layer -->
+          <div class="hero-sketch-backdrop" aria-hidden="true"></div>
+
           <div class="hero-image-container">
             <span class="hero-image-corner-tag">Featured 01 · Ayodhya</span>
             <img 
@@ -128,6 +134,7 @@
             </div>
           </div>
           <div class="hero-accent-block"></div>
+          <span class="hero-engineering-tag">26.8467° N · 80.9462° E</span>
         </div>
       </div>
 
@@ -142,6 +149,29 @@
         </div>
       </div>
     </section>
+
+    <!-- ==========================================================================
+         SKETCH TRANSITION STRIP 01 (HERO -> WORK)
+         ========================================================================== -->
+    <div class="sketch-transition-strip">
+      <div class="container sketch-transition-inner">
+        <div class="sketch-flow-sequence">
+          <span class="sketch-flow-step active">01 SKETCH</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">02 STRUCTURE</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">03 SPACE</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">04 BUILT FORM</span>
+        </div>
+        <div class="dimension-marker" style="max-width: 280px;">
+          <span>PRECISION DRAFTING & COMPUTATION</span>
+        </div>
+        <div class="sketch-coords">
+          KPA DRAFTING SYSTEM // 1,000+ WORKS
+        </div>
+      </div>
+    </div>
 
     <!-- ==========================================================================
          SELECTED WORK / PROJECTS (HORIZONTAL DRAGGABLE GALLERY)
@@ -180,17 +210,22 @@
          ABOUT K.P. ARCHITECTS (EDITORIAL LEGACY & PRACTICE)
          ========================================================================== -->
     <section class="section-spacing about-section" id="about">
-      <div class="container">
+      <div class="container about-container">
         <div class="about-layout-grid">
+          <!-- Left Column: Studio Profile & Narrative (58%) -->
           <div class="about-left-col">
             <div class="section-label">
               <span class="mono-tag" style="color: var(--accent-gold-dark);">Studio Profile</span>
               <div class="section-label-line" style="background-color: var(--accent-gold-dark);"></div>
             </div>
 
-            <h2 class="about-lead-statement">
+            <h2 class="about-main-heading">About Us</h2>
+
+            <p class="about-lead-statement">
               “As the third generation of architects, we expertly blend tradition with innovation.”
-            </h2>
+            </p>
+
+            <div class="about-divider-rule"></div>
 
             <p class="about-narrative">
               K.P. Architects is a dynamic architectural and engineering practice founded in 2012 by <strong>Ar. Praneet Khare</strong>, <strong>Ar. Shikha Ujjwal</strong>, and <strong>Er. Pragalbha Khare</strong> in Lucknow, Uttar Pradesh. Excelling in Architecture, Interior Design, and Structural Engineering, our portfolio encompasses over 1,000 projects across commercial, residential, hospitality, and industrial developments.
@@ -201,29 +236,64 @@
             </p>
 
             <div class="about-legacy-card">
-              <div class="legacy-card-title">Generational Heritage & Lineage</div>
+              <div class="legacy-card-title">Generational Heritage & Lineage (Since 1919)</div>
               <p class="legacy-card-text">
                 The firm's foundational roots trace back to the KBD master lineage originating in <strong>1919</strong>. In 2012, this century-spanning legacy evolved into the contemporary multidisciplinary practice of K.P. Architects, unifying heritage craftsmanship with computational structural detailing and turnkey delivery.
               </p>
             </div>
           </div>
 
+          <!-- Right Column: Studio Metrics & Practice Disciplines -->
           <div class="about-right-col">
-            <div class="about-image-composition">
-              <img 
-                src="/assets/pages/page_02.jpg" 
-                alt="K.P. Architects Studio Vision and Philosophy" 
-                class="about-main-image" 
-                loading="lazy"
-              />
-              <div class="about-overlay-stat">
-                <div class="overlay-stat-num">1,000+</div>
-                <div class="overlay-stat-desc">Completed Architectural & Engineering Works Across India</div>
-              </div>
+            <div class="about-stat-highlight-card">
+              <div class="stat-highlight-num">1,000+</div>
+              <div class="stat-highlight-title">Completed Works Across India</div>
+              <div class="stat-highlight-sub">Architectural Planning · Structural Detailing · Turnkey Execution</div>
             </div>
 
-            <div class="about-disciplines-list" id="about-disciplines-wrap">
-              <!-- Populated by JS -->
+            <div class="about-disciplines-block">
+              <div class="disciplines-header">
+                <span class="mono-tag" style="color: var(--accent-gold-dark);">Core Disciplines</span>
+                <span class="disciplines-header-note">Unified In-House Practice</span>
+              </div>
+              <div class="about-disciplines-list" id="about-disciplines-wrap">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orange Visual Break: Sketch -> Structure -> Space -> Built Form -->
+        <div class="about-wireframe-break eng-technical-grid">
+          <div class="wireframe-break-grid">
+            <div class="wireframe-break-visual">
+              <span class="wireframe-visual-badge">Architectural Wireframe // P.02</span>
+              <img 
+                src="/assets/sketch_assets/page_2_X4.webp" 
+                alt="Architectural Wireframe and Geometry by K.P. Architects" 
+                loading="lazy" 
+              />
+            </div>
+            <div class="wireframe-break-content">
+              <div class="wireframe-progression-bar">
+                <span>01 SKETCH</span>
+                <span>➔</span>
+                <span>02 STRUCTURE</span>
+                <span>➔</span>
+                <span>03 SPACE</span>
+                <span>➔</span>
+                <span>04 BUILT FORM</span>
+              </div>
+              <h3 class="wireframe-break-lead">
+                Every enduring landmark starts with mathematical conviction.
+              </h3>
+              <p class="wireframe-break-text">
+                Architecture at K.P. Architects is not merely decorative volume — it is calculated massing, calibrated load paths, and tectonic equilibrium. From the initial divider line on the drafting table to 1,000+ completed projects across India, our blueprints translate complex spatial aspirations into constructible reality.
+              </p>
+              <div style="display: flex; gap: 1rem; align-items: center; margin-top: 0.5rem; flex-wrap: wrap;">
+                <span class="eng-tag">IS CODE COMPLIANT</span>
+                <span class="eng-tag">RCC & STEEL COMPUTATION</span>
+              </div>
             </div>
           </div>
         </div>
@@ -244,7 +314,7 @@
           Integrated architectural, structural, and interior design solutions engineered under a unified single-point management framework.
         </p>
 
-        <!-- 3 Primary Pillars -->
+        <!-- 3 Primary Pillars with Engineering Drafting Treatment -->
         <div class="services-pillars-grid" id="services-pillars-grid">
           <!-- Populated by JS -->
         </div>
@@ -260,6 +330,94 @@
 
           <div class="capabilities-grid" id="capabilities-grid">
             <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         STANDOUT ENGINEERING & STRUCTURE SECTION (PAGE 3 REFERENCE)
+         ========================================================================== -->
+    <section class="section-spacing structure-engineering-section eng-technical-grid" id="structure-engineering">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;">
+          <div>
+            <div class="section-label">
+              <span class="eng-tag">KPA Engineering System</span>
+              <div class="section-label-line" style="background-color: #ffffff;"></div>
+            </div>
+            <h2 class="eng-editorial-title">Structure Design & Detailing</h2>
+          </div>
+          <div class="dimension-marker" style="max-width: 320px;">
+            <span>RCC & STEEL DETAILED ANALYSIS</span>
+          </div>
+        </div>
+
+        <div class="structure-grid-layout">
+          <!-- Left: Engineering Principles -->
+          <div class="structure-content-left">
+            <div>
+              <span class="eng-tag" style="margin-bottom: 0.75rem;">Core Structural Equation</span>
+              <h3 class="structure-subheading">Load · Stress · Balance</h3>
+              <p style="font-size: 1.05rem; line-height: 1.65; color: rgba(255, 255, 255, 0.92); margin-top: 0.75rem;">
+                Structure design and detailing of RCC & steel structures with zero-margin safety factors. We engineer structural envelopes that withstand seismic accelerations, high wind loads, and long spans while optimizing material consumption.
+              </p>
+            </div>
+
+            <div class="structure-principles-triad">
+              <div class="structure-principle-card">
+                <span class="eng-tag" style="font-size: 0.65rem; padding: 0.2rem 0.45rem;">01 / LOAD</span>
+                <h4 class="principle-title">Load Path Optimization</h4>
+                <p class="principle-desc">
+                  Direct vertical and lateral load distribution via reinforced shear walls, column nodes, and deep foundation systems.
+                </p>
+              </div>
+
+              <div class="structure-principle-card">
+                <span class="eng-tag" style="font-size: 0.65rem; padding: 0.2rem 0.45rem;">02 / STRESS</span>
+                <h4 class="principle-title">Stress & Seismic Analysis</h4>
+                <p class="principle-desc">
+                  3D dynamic finite element analysis complying with IS 1893 & IS 13920 ductile detailing for earthquake resilience.
+                </p>
+              </div>
+
+              <div class="structure-principle-card">
+                <span class="eng-tag" style="font-size: 0.65rem; padding: 0.2rem 0.45rem;">03 / BALANCE</span>
+                <h4 class="principle-title">Equilibrium & Spans</h4>
+                <p class="principle-desc">
+                  Long-span structural steel framing, post-tensioned slabs, and cantilever stabilization for column-free spatial luxury.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Structural Drawing Frame (From Page 3) -->
+          <div class="structure-drawing-frame">
+            <div class="structure-frame-header">
+              <span>Section Detail // Col-04</span>
+              <span>IS 456:2000 Detailing</span>
+            </div>
+            <img 
+              src="/assets/sketch_assets/page_3_X4.webp" 
+              alt="Structural Column, Load, Stress, and Balance Engineering Drawing" 
+              loading="lazy" 
+            />
+          </div>
+        </div>
+
+        <!-- Structural Metrics -->
+        <div class="structure-metrics-strip">
+          <div class="struct-metric-item">
+            <div class="struct-metric-num">1,000+</div>
+            <div class="struct-metric-label">Structural Engineering Certifications</div>
+          </div>
+          <div class="struct-metric-item">
+            <div class="struct-metric-num">100%</div>
+            <div class="struct-metric-label">IS Code & Seismic Compliance</div>
+          </div>
+          <div class="struct-metric-item">
+            <div class="struct-metric-num">03</div>
+            <div class="struct-metric-label">Decades Combined Engineering Leadership</div>
           </div>
         </div>
       </div>
@@ -306,25 +464,112 @@
     </section>
 
     <!-- ==========================================================================
-         APPROACH / PROCESS (01 TO 06 ARCHITECTURAL SEQUENCE)
+         SKETCH TRANSITION STRIP 02 (STORIES -> PROCESS)
          ========================================================================== -->
-    <section class="section-spacing process-section" id="process">
-      <div class="container">
-        <div class="section-label">
-          <span class="mono-tag">Methodology</span>
-          <div class="section-label-line"></div>
+    <div class="sketch-transition-strip">
+      <div class="container sketch-transition-inner">
+        <div class="sketch-flow-sequence">
+          <span class="sketch-flow-step active">01 FOUNDATION</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">02 STRUCTURE</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">03 DESIGN</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">04 EXECUTION</span>
+          <span class="sketch-flow-arrow">➔</span>
+          <span class="sketch-flow-step">05 FINISH</span>
         </div>
-        <h2 class="editorial-title">Approach & Execution</h2>
-        <p style="color: var(--text-secondary-dark); max-width: 640px; margin-top: 0.75rem;">
-          Structured 6-phase project delivery system ensuring rigorous quality control, budget discipline, and architectural fidelity.
+        <div class="dimension-marker" style="max-width: 280px;">
+          <span>VERTICAL PROCESS PROGRESSION</span>
+        </div>
+        <div class="sketch-coords">
+          PAGE 04 CONCEPT // ARCHITECTURAL LIFECYCLE
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         APPROACH / PROCESS (PAGE 4 ORANGE PROGRESSION CONCEPT)
+         ========================================================================== -->
+    <section class="section-spacing process-section eng-technical-grid" id="process">
+      <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1.5rem;">
+          <div>
+            <div class="section-label">
+              <span class="eng-tag">KPA Delivery Lifecycle</span>
+              <div class="section-label-line" style="background-color: #ffffff;"></div>
+            </div>
+            <h2 class="eng-editorial-title">Approach & Execution</h2>
+          </div>
+          <div class="dimension-marker" style="max-width: 320px;">
+            <span>SINGLE-POINT STRUCTURAL DISCIPLINE</span>
+          </div>
+        </div>
+
+        <p style="color: rgba(255, 255, 255, 0.9); max-width: 680px; margin-top: 1rem; font-size: 1.05rem; line-height: 1.6;">
+          A rigorous 5-stage progression from geological foundation engineering to turnkey architectural handover, backed by single-point project accountability.
         </p>
 
-        <div class="process-grid" id="process-grid">
-          <!-- Populated by JS -->
+        <!-- 5-Stage Engineering Progression (Page 4) -->
+        <div class="process-eng-progression">
+          <div class="process-eng-card">
+            <div>
+              <span class="process-eng-step-num">01 / STAGE</span>
+              <h3 class="process-eng-title">Foundation</h3>
+              <p class="process-eng-desc">
+                Topographical surveys, soil strata bearing analysis, and geotechnical foundation engineering.
+              </p>
+            </div>
+            <div class="process-eng-footer-tag">Substructure Detailing</div>
+          </div>
+
+          <div class="process-eng-card">
+            <div>
+              <span class="process-eng-step-num">02 / STAGE</span>
+              <h3 class="process-eng-title">Structure</h3>
+              <p class="process-eng-desc">
+                RCC framing, structural steel fabrication, shear core construction, and load-path certification.
+              </p>
+            </div>
+            <div class="process-eng-footer-tag">Superstructure Core</div>
+          </div>
+
+          <div class="process-eng-card">
+            <div>
+              <span class="process-eng-step-num">03 / STAGE</span>
+              <h3 class="process-eng-title">Design</h3>
+              <p class="process-eng-desc">
+                Spatial zoning, building envelope detailing, facade glazing, and coordinated MEP/HVAC routing.
+              </p>
+            </div>
+            <div class="process-eng-footer-tag">Architectural Envelope</div>
+          </div>
+
+          <div class="process-eng-card">
+            <div>
+              <span class="process-eng-step-num">04 / STAGE</span>
+              <h3 class="process-eng-title">Execution</h3>
+              <p class="process-eng-desc">
+                Daily site supervision, material pour testing, contract management, and milestone quality control.
+              </p>
+            </div>
+            <div class="process-eng-footer-tag">Quality Assurance</div>
+          </div>
+
+          <div class="process-eng-card">
+            <div>
+              <span class="process-eng-step-num">05 / STAGE</span>
+              <h3 class="process-eng-title">Finish</h3>
+              <p class="process-eng-desc">
+                Bespoke turnkey millwork, interior lighting calibration, snag list clearance, and final commissioning.
+              </p>
+            </div>
+            <div class="process-eng-footer-tag">Turnkey Handover</div>
+          </div>
         </div>
 
         <!-- Documented Delivery Principles -->
-        <div class="process-themes-bar">
+        <div class="process-themes-bar on-orange">
           <div class="theme-item">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <span>Single Point Control</span>

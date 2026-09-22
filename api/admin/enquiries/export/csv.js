@@ -34,6 +34,13 @@ export default async function handler(req, res) {
       if (error) throw error;
       records = data || [];
     } else {
+      const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
+      if (isProduction) {
+        console.error('Supabase is not configured in production environment.');
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        return res.status(500).json({ success: false, error: 'Database service is currently unavailable.' });
+      }
+
       records = getLocalEnquiries();
     }
 

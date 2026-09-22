@@ -49,6 +49,12 @@ export default async function handler(req, res) {
         if (error) throw error;
         return res.json({ success: true, data });
       } else {
+        const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
+        if (isProduction) {
+          console.error('Supabase is not configured in production environment.');
+          return res.status(500).json({ success: false, error: 'Database service is currently unavailable.' });
+        }
+
         const localDb = getLocalEnquiries();
         const idx = localDb.findIndex(r => r.id === id);
         if (idx === -1) {
@@ -76,6 +82,12 @@ export default async function handler(req, res) {
         if (error) throw error;
         return res.json({ success: true, message: 'Enquiry deleted successfully.' });
       } else {
+        const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
+        if (isProduction) {
+          console.error('Supabase is not configured in production environment.');
+          return res.status(500).json({ success: false, error: 'Database service is currently unavailable.' });
+        }
+
         let localDb = getLocalEnquiries();
         localDb = localDb.filter(r => r.id !== id);
         saveLocalEnquiries(localDb);

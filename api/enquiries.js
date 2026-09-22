@@ -133,7 +133,16 @@ export default async function handler(req, res) {
       }
       insertedRecord = data;
     } else {
-      // Local persistent fallback for development without remote database
+      const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
+      if (isProduction) {
+        console.error('Supabase is not configured in production environment.');
+        return res.status(500).json({
+          success: false,
+          error: 'Unable to save your consultation request. Database connection is not configured.'
+        });
+      }
+
+      // Local persistent fallback for local development without remote database
       try {
         const localDb = getLocalEnquiries();
         const nowIso = new Date().toISOString();
@@ -153,7 +162,7 @@ export default async function handler(req, res) {
         console.error('Local fallback error:', localErr);
         return res.status(500).json({
           success: false,
-          error: 'Unable to save your consultation request. Database connection is not configured.'
+          error: 'Unable to save your consultation request locally.'
         });
       }
     }
