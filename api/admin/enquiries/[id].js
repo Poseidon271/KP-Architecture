@@ -1,4 +1,3 @@
-import { getSupabaseAdmin, isSupabaseConfigured } from '../../_lib/supabase.js';
 import { setCorsHeaders, sanitize, parseRequestBody, getLocalEnquiries, saveLocalEnquiries } from '../../_lib/helpers.js';
 import { extractBearerToken, verifyAdminToken } from '../../_lib/auth.js';
 
@@ -22,8 +21,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ success: false, error: 'Enquiry ID is required.' });
   }
 
-  const supabaseAdmin = getSupabaseAdmin();
-
   // PATCH: Update enquiry
   if (req.method === 'PATCH') {
     try {
@@ -38,32 +35,14 @@ export default async function handler(req, res) {
       if (admin_notes !== undefined) updates.admin_notes = sanitize(admin_notes);
       if (last_contacted_at !== undefined) updates.last_contacted_at = last_contacted_at;
 
-      if (isSupabaseConfigured && supabaseAdmin) {
-        const { data, error } = await supabaseAdmin
-          .from('enquiries')
-          .update(updates)
-          .eq('id', id)
-          .select()
-          .single();
-
-        if (error) throw error;
-        return res.json({ success: true, data });
-      } else {
-        const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
-        if (isProduction) {
-          console.error('Supabase is not configured in production environment.');
-          return res.status(500).json({ success: false, error: 'Database service is currently unavailable.' });
-        }
-
-        const localDb = getLocalEnquiries();
-        const idx = localDb.findIndex(r => r.id === id);
-        if (idx === -1) {
-          return res.status(404).json({ success: false, error: 'Enquiry not found.' });
-        }
-        localDb[idx] = { ...localDb[idx], ...updates };
-        saveLocalEnquiries(localDb);
-        return res.json({ success: true, data: localDb[idx] });
+      const localDb = getLocalEnquiries();
+      const idx = localDb.findIndex(r => r.id === id);
+      if (idx === -1) {
+        return res.status(404).json({ success: false, error: 'Enquiry not found.' });
       }
+      localDb[idx] = { ...localDb[idx], ...updates };
+      saveLocalEnquiries(localDb);
+      return res.json({ success: true, data: localDb[idx] });
     } catch (error) {
       console.error('Error updating enquiry:', error);
       return res.status(500).json({ success: false, error: error.message || 'Error updating enquiry' });
@@ -73,26 +52,14 @@ export default async function handler(req, res) {
   // DELETE: Delete enquiry
   if (req.method === 'DELETE') {
     try {
-      if (isSupabaseConfigured && supabaseAdmin) {
-        const { error } = await supabaseAdmin
-          .from('enquiries')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-        return res.json({ success: true, message: 'Enquiry deleted successfully.' });
-      } else {
-        const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
-        if (isProduction) {
-          console.error('Supabase is not configured in production environment.');
-          return res.status(500).json({ success: false, error: 'Database service is currently unavailable.' });
-        }
-
-        let localDb = getLocalEnquiries();
-        localDb = localDb.filter(r => r.id !== id);
-        saveLocalEnquiries(localDb);
-        return res.json({ success: true, message: 'Enquiry deleted successfully.' });
+      let localDb = getLocalEnquiries();
+      const exists = localDb.some(r => r.id === id);
+      if (!exists) {
+        return res.status(404).json({ success: false, error: 'Enquiry not found.' });
       }
+      localDb = localDb.filter(r => r.id !== id);
+      saveLocalEnquiries(localDb);
+      return res.json({ success: true, message: 'Enquiry deleted successfully.' });
     } catch (error) {
       console.error('Error deleting enquiry:', error);
       return res.status(500).json({ success: false, error: error.message || 'Error deleting enquiry' });

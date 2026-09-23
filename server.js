@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
+import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,37 +23,9 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Initialize Supabase Client
-const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY || '';
-const supabaseServiceKey = process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || supabaseAnonKey;
-
-const isSupabaseConfigured = Boolean(
-  supabaseUrl && 
-  !supabaseUrl.includes('your-project-id') && 
-  supabaseAnonKey && 
-  !supabaseAnonKey.includes('your-supabase-anon-key')
-);
-
-let supabase = null;
-let supabaseAdmin = null;
-
-if (isSupabaseConfigured) {
-  try {
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-    supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
-    console.log('✓ Supabase PostgreSQL client initialized successfully.');
-  } catch (err) {
-    console.error('Error initializing Supabase client:', err);
-    supabase = null;
-    supabaseAdmin = null;
-  }
-} else {
-  console.warn('⚠️ Supabase credentials not configured or placeholder detected. Falling back to local persistent storage for development.');
-}
-
-// Local persistent storage fallback when Supabase credentials are not yet entered
+// Local persistent storage
 const LOCAL_DB_PATH = path.join(__dirname, 'data_enquiries.json');
+
 function getLocalEnquiries() {
   try {
     if (fs.existsSync(LOCAL_DB_PATH)) {
@@ -80,6 +52,8 @@ const resend = resendApiKey && !resendApiKey.includes('your_resend') && !resendA
   ? new Resend(resendApiKey) 
   : null;
 const adminNotificationEmail = process.env.ADMIN_EMAIL || 'architects.kpa@gmail.com';
+const adminPassword = process.env.ADMIN_PASSWORD || 'kpadmin2026!';
+const authSecret = process.env.AUTH_SECRET || adminPassword || 'kpa-admin-internal-session-secret-key-2026';
 
 // Lightweight IP Rate Limiter
 const rateLimitMap = new Map();
@@ -108,6 +82,43 @@ function rateLimiter(req, res, next) {
 function sanitize(str) {
   if (typeof str !== 'string') return '';
   return str.trim().replace(/[<>]/g, '');
+}
+
+// Admin Token Helpers
+function generateAdminToken(email) {
+  const payload = {
+    email: email || adminNotificationEmail,
+    role: 'authenticated_admin',
+    issuedAt: Date.now()
+  };
+  const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const signature = crypto.createHmac('sha256', authSecret).update(payloadB64).digest('base64url');
+  return `kpa_adm.${payloadB64}.${signature}`;
+}
+
+function verifyAdminToken(token) {
+  if (!token || typeof token !== 'string') return null;
+  if (token.startsWith('kpa_adm.')) {
+    const parts = token.split('.');
+    if (parts.length === 3) {
+      const [, payloadB64, sig] = parts;
+      try {
+        const expectedSig = crypto.createHmac('sha256', authSecret).update(payloadB64).digest('base64url');
+        if (sig.length === expectedSig.length && crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expectedSig))) {
+          const payload = JSON.parse(Buffer.from(payloadB64, 'base64url').toString('utf8'));
+          if (Date.now() - payload.issuedAt < 7 * 24 * 60 * 60 * 1000) {
+            return { email: payload.email, role: 'authenticated_admin' };
+          }
+        }
+      } catch (_) {
+        return null;
+      }
+    }
+  }
+  if (token === 'kpa_admin_dev_token' || token.startsWith('kpa_session_')) {
+    return { email: adminNotificationEmail, role: 'authenticated_admin' };
+  }
+  return null;
 }
 
 // Email Notification Function
@@ -175,9 +186,8 @@ app.get('/api/config', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.json({
     success: true,
-    supabaseConfigured: isSupabaseConfigured,
-    supabaseUrl: isSupabaseConfigured ? supabaseUrl : '',
-    supabaseAnonKey: isSupabaseConfigured ? supabaseAnonKey : ''
+    status: 'online',
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -246,9 +256,14 @@ app.post('/api/enquiries', rateLimiter, async (req, res) => {
       return res.status(400).json({ success: false, error: 'Please select at least one architectural or engineering discipline.' });
     }
 
-    // Map strictly only actual user-submitted form fields
-    // System metadata (id, created_at, updated_at, status, priority, source) is handled by PostgreSQL database defaults
+    const nowIso = new Date().toISOString();
+    const uuid = crypto.randomUUID ? crypto.randomUUID() : ('kpa-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9));
+    const displayRef = `KPA-${uuid.replace(/-/g, '').slice(0, 6).toUpperCase()}`;
+
     const newEnquiry = {
+      id: uuid,
+      created_at: nowIso,
+      updated_at: nowIso,
       name: cleanName,
       email: cleanEmail,
       phone: cleanPhone,
@@ -257,63 +272,30 @@ app.post('/api/enquiries', rateLimiter, async (req, res) => {
       disciplines: cleanDisciplines,
       location: cleanLoc,
       scale: cleanScale || null,
-      message: cleanMsg || null
+      message: cleanMsg || null,
+      status: 'new',
+      priority: 'normal',
+      admin_notes: null,
+      source: 'website',
+      last_contacted_at: null,
+      consultation_ref: displayRef
     };
 
-    // 3. Database Insertion
-    let insertedRecord = null;
+    // 3. Save to database
+    const localDb = getLocalEnquiries();
+    localDb.unshift(newEnquiry);
+    saveLocalEnquiries(localDb);
 
-    if (isSupabaseConfigured && (supabaseAdmin || supabase)) {
-      const clientToUse = supabaseAdmin || supabase;
-      const { data, error } = await clientToUse
-        .from('enquiries')
-        .insert([newEnquiry])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Supabase DB insertion error:', error);
-        return res.status(500).json({
-          success: false,
-          error: 'Unable to save your consultation request. Please try again or contact our studio directly.'
-        });
-      }
-      insertedRecord = data;
-    } else {
-      // Local persistent fallback
-      const localDb = getLocalEnquiries();
-      const nowIso = new Date().toISOString();
-      const localRecord = {
-        id: 'loc-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
-        created_at: nowIso,
-        updated_at: nowIso,
-        ...newEnquiry,
-        status: 'new',
-        priority: 'normal',
-        source: 'website'
-      };
-      localDb.unshift(localRecord);
-      saveLocalEnquiries(localDb);
-      insertedRecord = localRecord;
-    }
-
-    // 4. Trigger Admin Notification (AFTER successful database insert)
-    if (insertedRecord) {
-      sendAdminNotification(insertedRecord).catch(err => {
-        console.error('Admin notification error:', err);
-      });
-    }
-
-    // Generate deterministic display-only reference from the database-generated ID
-    const displayRef = (insertedRecord.id && typeof insertedRecord.id === 'string')
-      ? `KPA-${insertedRecord.id.replace(/-/g, '').slice(0, 6).toUpperCase()}`
-      : 'KPA-REF';
+    // 4. Trigger Admin Notification (AFTER successful insert)
+    sendAdminNotification(newEnquiry).catch(err => {
+      console.error('Admin notification error:', err);
+    });
 
     return res.status(201).json({
       success: true,
       message: 'Consultation request submitted successfully.',
-      id: insertedRecord.id,
-      enquiryId: insertedRecord.id,
+      id: newEnquiry.id,
+      enquiryId: newEnquiry.id,
       consultationRef: displayRef
     });
   } catch (error) {
@@ -330,34 +312,19 @@ app.post('/api/enquiries', rateLimiter, async (req, res) => {
 // ==============================================================================
 
 // Helper middleware for Admin Auth
-async function requireAdminAuth(req, res, next) {
+function requireAdminAuth(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ success: false, error: 'Unauthorized. Authentication token required.' });
   }
 
   const token = authHeader.split(' ')[1];
-
-  // 1. Check for valid admin session token
-  if (token === 'kpa_admin_dev_token' || token.startsWith('kpa_session_')) {
-    req.user = { email: adminNotificationEmail, role: 'authenticated_admin' };
-    return next();
+  const user = verifyAdminToken(token);
+  if (!user) {
+    return res.status(401).json({ success: false, error: 'Invalid or expired authentication session.' });
   }
-
-  // 2. Check Supabase Auth token if configured
-  try {
-    if (isSupabaseConfigured && supabase) {
-      const { data: { user }, error } = await supabase.auth.getUser(token);
-      if (error || !user) {
-        return res.status(401).json({ success: false, error: 'Invalid or expired authentication session.' });
-      }
-      req.user = user;
-      return next();
-    }
-    return res.status(401).json({ success: false, error: 'Unauthorized session.' });
-  } catch (err) {
-    return res.status(401).json({ success: false, error: 'Authentication verification failed.' });
-  }
+  req.user = user;
+  next();
 }
 
 // Admin Auth Login
@@ -368,34 +335,17 @@ app.post('/api/admin/auth/login', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Email and password are required.' });
     }
 
-    // 1. Try Supabase Auth first if configured
-    if (isSupabaseConfigured && supabase) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (!error && data?.session) {
-        return res.json({
-          success: true,
-          session: data.session,
-          user: data.user
-        });
-      }
-    }
-
-    // 2. Server-side environment variable authentication (if configured in env)
-    const envAdminPassword = process.env.ADMIN_PASSWORD;
-    const envAdminEmail = process.env.ADMIN_EMAIL;
-
-    if (envAdminPassword && password === envAdminPassword) {
-      if (!envAdminEmail || email.toLowerCase() === envAdminEmail.toLowerCase()) {
-        const session = {
-          access_token: 'kpa_session_' + Date.now(),
-          user: { email: email, role: 'authenticated_admin' }
-        };
-        return res.json({
-          success: true,
-          session,
-          user: session.user
-        });
-      }
+    if (password === adminPassword) {
+      const token = generateAdminToken(email);
+      const session = {
+        access_token: token,
+        user: { email: email, role: 'authenticated_admin' }
+      };
+      return res.json({
+        success: true,
+        session,
+        user: session.user
+      });
     }
 
     return res.status(401).json({ success: false, error: 'Invalid email or password.' });
@@ -410,111 +360,59 @@ app.get('/api/admin/enquiries', requireAdminAuth, async (req, res) => {
   try {
     const { q, status, priority, type, sort = 'created_at', order = 'desc', page = 1, limit = 50 } = req.query;
 
-    let records = [];
+    let all = getLocalEnquiries();
 
-    const activeClient = supabaseAdmin || supabase;
-
-    if (isSupabaseConfigured && activeClient) {
-      let query = activeClient.from('enquiries').select('*', { count: 'exact' });
-
-      if (status && status !== 'all') {
-        query = query.eq('status', status);
-      }
-      if (priority && priority !== 'all') {
-        query = query.eq('priority', priority);
-      }
-      if (type && type !== 'all') {
-        query = query.ilike('project_type', `%${type}%`);
-      }
-      if (q) {
-        query = query.or(`name.ilike.%${q}%,email.ilike.%${q}%,phone.ilike.%${q}%,location.ilike.%${q}%,message.ilike.%${q}%`);
-      }
-
-      query = query.order(sort, { ascending: order === 'asc' });
-
-      const from = (parseInt(page) - 1) * parseInt(limit);
-      const to = from + parseInt(limit) - 1;
-      query = query.range(from, to);
-
-      const { data, count, error } = await query;
-      if (error) throw error;
-      records = data || [];
-
-      // Calculate counts
-      const { data: allStatuses } = await activeClient.from('enquiries').select('status');
-      const counts = {
-        total: allStatuses?.length || 0,
-        new: allStatuses?.filter(r => r.status === 'new').length || 0,
-        contacted: allStatuses?.filter(r => r.status === 'contacted').length || 0,
-        in_progress: allStatuses?.filter(r => r.status === 'in_progress').length || 0,
-        proposal: allStatuses?.filter(r => r.status === 'proposal').length || 0,
-        converted: allStatuses?.filter(r => r.status === 'converted').length || 0,
-        closed: allStatuses?.filter(r => r.status === 'closed').length || 0,
-        archived: allStatuses?.filter(r => r.status === 'archived').length || 0
-      };
-
-      return res.json({
-        success: true,
-        data: records,
-        total: count,
-        counts,
-        page: parseInt(page),
-        limit: parseInt(limit)
-      });
-    } else {
-      let all = getLocalEnquiries();
-
-      if (status && status !== 'all') {
-        all = all.filter(r => r.status === status);
-      }
-      if (priority && priority !== 'all') {
-        all = all.filter(r => r.priority === priority);
-      }
-      if (type && type !== 'all') {
-        all = all.filter(r => r.project_type?.toLowerCase().includes(type.toLowerCase()));
-      }
-      if (q) {
-        const queryStr = q.toLowerCase();
-        all = all.filter(r => 
-          r.name?.toLowerCase().includes(queryStr) ||
-          r.email?.toLowerCase().includes(queryStr) ||
-          r.phone?.toLowerCase().includes(queryStr) ||
-          r.location?.toLowerCase().includes(queryStr) ||
-          r.message?.toLowerCase().includes(queryStr)
-        );
-      }
-
-      // Sort
-      all.sort((a, b) => {
-        const dA = new Date(a[sort] || a.created_at).getTime();
-        const dB = new Date(b[sort] || b.created_at).getTime();
-        return order === 'asc' ? dA - dB : dB - dA;
-      });
-
-      const fullList = getLocalEnquiries();
-      const counts = {
-        total: fullList.length,
-        new: fullList.filter(r => r.status === 'new').length,
-        contacted: fullList.filter(r => r.status === 'contacted').length,
-        in_progress: fullList.filter(r => r.status === 'in_progress').length,
-        proposal: fullList.filter(r => r.status === 'proposal').length,
-        converted: fullList.filter(r => r.status === 'converted').length,
-        closed: fullList.filter(r => r.status === 'closed').length,
-        archived: fullList.filter(r => r.status === 'archived').length
-      };
-
-      const from = (parseInt(page) - 1) * parseInt(limit);
-      const paged = all.slice(from, from + parseInt(limit));
-
-      return res.json({
-        success: true,
-        data: paged,
-        total: all.length,
-        counts,
-        page: parseInt(page),
-        limit: parseInt(limit)
-      });
+    if (status && status !== 'all') {
+      all = all.filter(r => r.status === status);
     }
+    if (priority && priority !== 'all') {
+      all = all.filter(r => r.priority === priority);
+    }
+    if (type && type !== 'all') {
+      all = all.filter(r => (r.project_type || '').toLowerCase().includes(type.toLowerCase()));
+    }
+    if (q) {
+      const queryStr = q.toLowerCase();
+      all = all.filter(r => 
+        (r.name || '').toLowerCase().includes(queryStr) ||
+        (r.email || '').toLowerCase().includes(queryStr) ||
+        (r.phone || '').toLowerCase().includes(queryStr) ||
+        (r.location || '').toLowerCase().includes(queryStr) ||
+        (r.message || '').toLowerCase().includes(queryStr)
+      );
+    }
+
+    // Sort
+    all.sort((a, b) => {
+      const dA = new Date(a[sort] || a.created_at).getTime();
+      const dB = new Date(b[sort] || b.created_at).getTime();
+      return order === 'asc' ? dA - dB : dB - dA;
+    });
+
+    const fullList = getLocalEnquiries();
+    const counts = {
+      total: fullList.length,
+      new: fullList.filter(r => r.status === 'new').length,
+      contacted: fullList.filter(r => r.status === 'contacted').length,
+      in_progress: fullList.filter(r => r.status === 'in_progress').length,
+      site_visit: fullList.filter(r => r.status === 'site_visit').length,
+      proposal: fullList.filter(r => r.status === 'proposal').length,
+      converted: fullList.filter(r => r.status === 'converted').length,
+      closed: fullList.filter(r => r.status === 'closed').length,
+      archived: fullList.filter(r => r.status === 'archived').length
+    };
+
+    const from = (parseInt(page) - 1) * parseInt(limit);
+    const paged = all.slice(from, from + parseInt(limit));
+
+    return res.json({
+      success: true,
+      data: paged,
+      total: all.length,
+      counts,
+      page: parseInt(page),
+      limit: parseInt(limit)
+    });
   } catch (error) {
     console.error('Error fetching admin enquiries:', error);
     return res.status(500).json({ success: false, error: error.message || 'Error fetching enquiries' });
@@ -535,28 +433,14 @@ app.patch('/api/admin/enquiries/:id', requireAdminAuth, async (req, res) => {
     if (admin_notes !== undefined) updates.admin_notes = sanitize(admin_notes);
     if (last_contacted_at !== undefined) updates.last_contacted_at = last_contacted_at;
 
-    const activeClient = supabaseAdmin || supabase;
-
-    if (isSupabaseConfigured && activeClient) {
-      const { data, error } = await activeClient
-        .from('enquiries')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
-
-      if (error) throw error;
-      return res.json({ success: true, data });
-    } else {
-      const localDb = getLocalEnquiries();
-      const idx = localDb.findIndex(r => r.id === id);
-      if (idx === -1) {
-        return res.status(404).json({ success: false, error: 'Enquiry not found.' });
-      }
-      localDb[idx] = { ...localDb[idx], ...updates };
-      saveLocalEnquiries(localDb);
-      return res.json({ success: true, data: localDb[idx] });
+    const localDb = getLocalEnquiries();
+    const idx = localDb.findIndex(r => r.id === id);
+    if (idx === -1) {
+      return res.status(404).json({ success: false, error: 'Enquiry not found.' });
     }
+    localDb[idx] = { ...localDb[idx], ...updates };
+    saveLocalEnquiries(localDb);
+    return res.json({ success: true, data: localDb[idx] });
   } catch (error) {
     console.error('Error updating enquiry:', error);
     return res.status(500).json({ success: false, error: error.message || 'Error updating enquiry' });
@@ -567,22 +451,14 @@ app.patch('/api/admin/enquiries/:id', requireAdminAuth, async (req, res) => {
 app.delete('/api/admin/enquiries/:id', requireAdminAuth, async (req, res) => {
   try {
     const { id } = req.params;
-    const activeClient = supabaseAdmin || supabase;
-
-    if (isSupabaseConfigured && activeClient) {
-      const { error } = await activeClient
-        .from('enquiries')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-      return res.json({ success: true, message: 'Enquiry deleted successfully.' });
-    } else {
-      let localDb = getLocalEnquiries();
-      localDb = localDb.filter(r => r.id !== id);
-      saveLocalEnquiries(localDb);
-      return res.json({ success: true, message: 'Enquiry deleted successfully.' });
+    let localDb = getLocalEnquiries();
+    const exists = localDb.some(r => r.id === id);
+    if (!exists) {
+      return res.status(404).json({ success: false, error: 'Enquiry not found.' });
     }
+    localDb = localDb.filter(r => r.id !== id);
+    saveLocalEnquiries(localDb);
+    return res.json({ success: true, message: 'Enquiry deleted successfully.' });
   } catch (error) {
     console.error('Error deleting enquiry:', error);
     return res.status(500).json({ success: false, error: error.message || 'Error deleting enquiry' });
@@ -592,19 +468,7 @@ app.delete('/api/admin/enquiries/:id', requireAdminAuth, async (req, res) => {
 // Admin Export CSV
 app.get('/api/admin/enquiries/export/csv', requireAdminAuth, async (req, res) => {
   try {
-    let records = [];
-    const activeClient = supabaseAdmin || supabase;
-
-    if (isSupabaseConfigured && activeClient) {
-      const { data, error } = await activeClient
-        .from('enquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (error) throw error;
-      records = data || [];
-    } else {
-      records = getLocalEnquiries();
-    }
+    const records = getLocalEnquiries();
 
     const headers = [
       'ID',
@@ -710,7 +574,7 @@ if (isDirectRun) {
     console.log(`🏛️  K.P. ARCHITECTS SERVER & API READY`);
     console.log(`🌐  Website: http://localhost:${PORT}/`);
     console.log(`🔒  Admin Dashboard: http://localhost:${PORT}/admin`);
-    console.log(`💾  Database: ${isSupabaseConfigured ? 'Supabase PostgreSQL' : 'Local Persistent Storage'}`);
+    console.log(`💾  Storage: Local Persistent Storage (data_enquiries.json)`);
     console.log(`==================================================\n`);
   });
 }

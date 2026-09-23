@@ -1,4 +1,3 @@
-import { isSupabaseConfigured, supabaseUrl, supabaseAnonKey } from './_lib/supabase.js';
 import { setCorsHeaders } from './_lib/helpers.js';
 
 export default async function handler(req, res) {
@@ -18,8 +17,7 @@ export default async function handler(req, res) {
 
   return res.json({
     success: true,
-    supabaseConfigured: isSupabaseConfigured,
-    supabaseUrl: isSupabaseConfigured ? supabaseUrl : '',
-    supabaseAnonKey: isSupabaseConfigured ? supabaseAnonKey : ''
+    status: 'online',
+    timestamp: new Date().toISOString()
   });
 }

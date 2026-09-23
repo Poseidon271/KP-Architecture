@@ -1,4 +1,3 @@
-import { getSupabaseAdmin, isSupabaseConfigured } from './_lib/supabase.js';
 import {
   sanitize,
   setCorsHeaders,
@@ -9,6 +8,7 @@ import {
   saveLocalEnquiries
 } from './_lib/helpers.js';
 import { sendAdminNotification } from './_lib/email.js';
+import crypto from 'crypto';
 
 export default async function handler(req, res) {
   // 1. CORS headers & preflight check
@@ -99,9 +99,15 @@ export default async function handler(req, res) {
       return res.status(400).json({ success: false, error: 'Please select at least one architectural or engineering discipline.' });
     }
 
-    // 5. Database payload: ONLY explicitly submitted user fields
-    // System fields (id, created_at, updated_at, status, priority, source) are handled by database defaults
-    const newEnquiry = {
+    // 5. Build record with standard fields
+    const nowIso = new Date().toISOString();
+    const uuid = crypto.randomUUID ? crypto.randomUUID() : ('kpa-' + Date.now() + '-' + Math.random().toString(36).substring(2, 9));
+    const refCode = `KPA-${uuid.replace(/-/g, '').slice(0, 6).toUpperCase()}`;
+
+    const newRecord = {
+      id: uuid,
+      created_at: nowIso,
+      updated_at: nowIso,
       name: cleanName,
       email: cleanEmail,
       phone: cleanPhone,
@@ -110,81 +116,31 @@ export default async function handler(req, res) {
       disciplines: cleanDisciplines,
       location: cleanLoc,
       scale: cleanScale || null,
-      message: cleanMsg || null
+      message: cleanMsg || null,
+      status: 'new',
+      priority: 'normal',
+      admin_notes: null,
+      source: 'website',
+      last_contacted_at: null,
+      consultation_ref: refCode
     };
 
-    // 6. Database Insertion using Supabase secret key
-    let insertedRecord = null;
-    const supabaseAdmin = getSupabaseAdmin();
-
-    if (isSupabaseConfigured && supabaseAdmin) {
-      const { data, error } = await supabaseAdmin
-        .from('enquiries')
-        .insert([newEnquiry])
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Supabase DB insertion error:', error);
-        return res.status(500).json({
-          success: false,
-          error: 'Unable to save your consultation request. Please try again or contact our studio directly.'
-        });
-      }
-      insertedRecord = data;
-    } else {
-      const isProduction = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
-      if (isProduction) {
-        console.error('Supabase is not configured in production environment.');
-        return res.status(500).json({
-          success: false,
-          error: 'Unable to save your consultation request. Database connection is not configured.'
-        });
-      }
-
-      // Local persistent fallback for local development without remote database
-      try {
-        const localDb = getLocalEnquiries();
-        const nowIso = new Date().toISOString();
-        const localRecord = {
-          id: 'loc-' + Date.now() + '-' + Math.random().toString(36).substring(2, 8),
-          created_at: nowIso,
-          updated_at: nowIso,
-          ...newEnquiry,
-          status: 'new',
-          priority: 'normal',
-          source: 'website'
-        };
-        localDb.unshift(localRecord);
-        saveLocalEnquiries(localDb);
-        insertedRecord = localRecord;
-      } catch (localErr) {
-        console.error('Local fallback error:', localErr);
-        return res.status(500).json({
-          success: false,
-          error: 'Unable to save your consultation request locally.'
-        });
-      }
-    }
+    // 6. Save record
+    const allEnquiries = getLocalEnquiries();
+    allEnquiries.unshift(newRecord);
+    saveLocalEnquiries(allEnquiries);
 
     // 7. Dispatch admin notification email (asynchronous, does not block response)
-    if (insertedRecord) {
-      sendAdminNotification(insertedRecord).catch(err => {
-        console.error('Admin notification error:', err);
-      });
-    }
-
-    // 8. Generate deterministic display-only reference from database ID
-    const displayRef = (insertedRecord.id && typeof insertedRecord.id === 'string')
-      ? `KPA-${insertedRecord.id.replace(/-/g, '').slice(0, 6).toUpperCase()}`
-      : 'KPA-REF';
+    sendAdminNotification(newRecord).catch(err => {
+      console.error('Admin notification error:', err);
+    });
 
     return res.status(201).json({
       success: true,
       message: 'Consultation request submitted successfully.',
-      id: insertedRecord.id,
-      enquiryId: insertedRecord.id,
-      consultationRef: displayRef
+      id: newRecord.id,
+      enquiryId: newRecord.id,
+      consultationRef: refCode
     });
   } catch (error) {
     console.error('Server error during enquiry submission:', error);

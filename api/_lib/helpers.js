@@ -81,7 +81,7 @@ export function getClientIp(req) {
   );
 }
 
-// Local fallback storage for dev environments without Supabase
+// Persistent storage for enquiries
 const LOCAL_DB_PATH = path.join(process.cwd(), 'data_enquiries.json');
 
 export function getLocalEnquiries() {
