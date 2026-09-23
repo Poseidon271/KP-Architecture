@@ -382,7 +382,7 @@ export const KPA_DATA = {
       location: "Hazratganj, Lucknow",
       year: "Completed",
       highlight: "High-street fashion retail interior with custom architectural millwork and precision illumination.",
-      description: "Sophisticated boutique spatial design optimizing customer journey, luxury apparel displays, fitting lounges, and golden architectural accent details.",
+      description: "Sophisticated boutique spatial design optimizing customer journey, luxury apparel displays, fitting lounges, and signature architectural accent details.",
       heroImage: "/assets/projects/mogs/img_p35_1.jpg",
       gallery: [
         "/assets/projects/mogs/img_p35_1.jpg",
