@@ -425,10 +425,11 @@ ul, ol {
 .mobile-drawer {
   position: fixed;
   top: 0;
-  right: -100%;
+  right: 0;
   width: 100%;
   max-width: 380px;
   height: 100vh;
+  height: 100dvh;
   background-color: var(--bg-dark);
   z-index: 99;
   padding: calc(var(--header-height) + 2rem) 2rem 2.5rem;
@@ -436,12 +437,17 @@ ul, ol {
   flex-direction: column;
   justify-content: space-between;
   border-left: 1px solid var(--border-dark);
-  transition: right var(--duration-slow) var(--ease-editorial);
+  transform: translateX(100%);
+  visibility: hidden;
+  pointer-events: none;
+  transition: transform var(--duration-slow) var(--ease-editorial), visibility var(--duration-slow);
   box-shadow: -10px 0 40px rgba(0, 0, 0, 0.8);
 }
 
 .mobile-drawer.open {
-  right: 0;
+  transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-drawer-overlay {
@@ -2417,422 +2423,6 @@ ul, ol {
 }
 
 /* ==========================================================================
-   RESPONSIVE BREAKPOINTS (320px up to 1440px+)
-   ========================================================================== */
-
-/* Standard Desktop (1025px–1439px): 4 cards per row */
-@media (max-width: 1439px) {
-  .team-members-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-}
-
-/* Laptops & Desktops up to 1200px */
-@media (max-width: 1200px) {
-  .hero-content-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero-visual-frame {
-    max-width: 640px;
-    margin: 1.5rem auto 0;
-    width: 100%;
-  }
-  .structure-grid-layout {
-    grid-template-columns: 1fr;
-  }
-  .wireframe-break-grid {
-    grid-template-columns: 1fr;
-  }
-  .capabilities-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .process-eng-progression {
-    grid-template-columns: repeat(3, 1fr);
-  }
-  .leaders-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .team-members-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-  .footer-top-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Tablet Landscape & Medium Screens (601px - 1024px) */
-@media (max-width: 1024px) {
-  .team-members-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.25rem;
-  }
-  .services-pillars-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.75rem;
-  }
-  .services-pillars-grid > *:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-  }
-  .about-layout-grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-  .structure-metrics-strip {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .nav-desktop {
-    display: none;
-  }
-  .mobile-toggle {
-    display: flex;
-  }
-  .hero-accent-block {
-    right: 0;
-    bottom: 0;
-  }
-  .hero-sketch-backdrop {
-    right: 0;
-    top: 0;
-    max-width: 100%;
-  }
-  .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .story-item,
-  .story-item:nth-child(even) {
-    grid-template-columns: 1fr;
-  }
-  .story-item:nth-child(even) .story-media-wrap {
-    order: 0;
-  }
-  .process-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .contact-layout-grid {
-    grid-template-columns: 1fr;
-  }
-  .modal-gallery-grid {
-    grid-template-columns: 1fr;
-  }
-  .modal-details-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Standard Tablets & Large Phones (601px - 768px) */
-@media (max-width: 768px) {
-  :root {
-    --header-height: 72px;
-    --container-pad: clamp(1rem, 3.5vw, 1.5rem);
-  }
-  .hero-headline {
-    font-size: clamp(1.65rem, 5.5vw, 2.35rem);
-    letter-spacing: -0.025em;
-    line-height: 1.08;
-  }
-  .about-layout-grid {
-    gap: 2rem;
-  }
-  .about-main-heading {
-    font-size: clamp(1.45rem, 5.5vw, 2.4rem);
-  }
-  .about-lead-statement {
-    font-size: clamp(0.95rem, 3vw, 1.15rem);
-  }
-  .about-stat-highlight-card {
-    padding: 1.5rem 1.25rem;
-  }
-  .about-disciplines-block {
-    padding: 1.25rem;
-  }
-  .about-disciplines-list {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .capabilities-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  .categories-grid {
-    grid-template-columns: 1fr;
-  }
-  .process-grid {
-    grid-template-columns: 1fr;
-  }
-  .leaders-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .team-members-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem;
-  }
-  .form-row-2col {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .disciplines-selector {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .footer-top-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .structure-principles-triad {
-    grid-template-columns: 1fr;
-  }
-  .process-eng-progression {
-    grid-template-columns: 1fr;
-  }
-  .structure-metrics-strip {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
-  }
-  .sketch-transition-inner {
-    justify-content: center;
-    text-align: center;
-  }
-  .wireframe-break-grid {
-    padding: clamp(1.5rem, 4vw, 2.5rem);
-  }
-  .hero-bottom-bar {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-  }
-  .hero-stats-strip {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    width: 100%;
-    gap: 1.25rem 1rem;
-  }
-  .hero-scroll-prompt {
-    display: none;
-  }
-}
-
-/* Mobile Devices (431px - 600px) */
-@media (max-width: 600px) {
-  .team-members-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.85rem;
-    margin-top: 2rem;
-  }
-  .member-info {
-    padding: 0.85rem 0.75rem 0.95rem;
-    min-height: 106px;
-  }
-  .member-name {
-    font-size: 0.82rem;
-  }
-  .member-role {
-    font-size: 0.65rem;
-  }
-  .member-qual {
-    font-size: 0.62rem;
-  }
-  .services-pillars-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-top: 2rem;
-  }
-  .services-pillars-grid > *:last-child:nth-child(odd) {
-    grid-column: auto;
-    max-width: 100%;
-    margin: 0;
-  }
-  .service-pillar-card {
-    padding: clamp(1.25rem, 4vw, 1.75rem) clamp(1rem, 3.5vw, 1.25rem);
-  }
-  .hero-headline {
-    font-size: clamp(1.45rem, 6.2vw, 2.1rem);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
-  }
-  .hero-lead {
-    font-size: 0.95rem;
-    line-height: 1.55;
-  }
-  .hero-actions {
-    flex-direction: column;
-    align-items: stretch;
-    width: 100%;
-    gap: 0.85rem;
-  }
-  .hero-actions .btn-primary,
-  .hero-actions .btn-outline {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding: 0.85rem 1.25rem;
-    font-size: 0.78rem;
-  }
-  .work-header-row {
-    flex-wrap: wrap;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-  .leaders-grid {
-    grid-template-columns: 1fr;
-  }
-  .capabilities-grid {
-    grid-template-columns: 1fr;
-  }
-  .wizard-actions {
-    flex-direction: column-reverse;
-    width: 100%;
-    gap: 0.75rem;
-  }
-  .wizard-actions button {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
-  }
-  .modal-body {
-    padding: 1.25rem 1rem;
-    gap: 1.5rem;
-  }
-}
-
-/* Standard Mobile Phones (376px - 480px) */
-@media (max-width: 480px) {
-  .team-members-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem;
-  }
-  .member-info {
-    padding: 0.75rem 0.65rem 0.85rem;
-    min-height: 102px;
-  }
-  .hero-image-corner-tag {
-    top: 0.5rem;
-    left: 0.5rem;
-    font-size: 0.62rem;
-    padding: 0.25rem 0.5rem;
-  }
-  .hero-image-caption-bar {
-    padding: 1.25rem 0.75rem 0.75rem;
-  }
-  .hero-project-name {
-    font-size: 0.95rem;
-  }
-  .hero-project-loc {
-    font-size: 0.7rem;
-  }
-  .mobile-drawer {
-    max-width: 100%;
-    padding: calc(var(--header-height) + 1rem) 1.5rem 2rem;
-  }
-  .mobile-nav-link {
-    font-size: 1.25rem;
-  }
-  .brand-logo-img {
-    height: 32px;
-  }
-  .dimension-marker {
-    font-size: 0.62rem;
-  }
-  .wireframe-progression-bar {
-    font-size: 0.7rem;
-    gap: 0.4rem;
-  }
-  .wireframe-break-visual {
-    padding: 0.75rem;
-  }
-}
-
-/* Small Mobile Phones (320px - 375px) */
-@media (max-width: 375px) {
-  :root {
-    --header-height: 68px;
-    --container-pad: 0.9rem;
-  }
-  .team-members-grid {
-    grid-template-columns: 1fr;
-    max-width: 280px;
-    margin-left: auto;
-    margin-right: auto;
-    gap: 1.15rem;
-    margin-top: 1.75rem;
-  }
-  .member-info {
-    padding: 0.85rem 0.85rem 1rem;
-    min-height: auto;
-  }
-  .hero-headline {
-    font-size: clamp(1.25rem, 5.8vw, 1.55rem);
-    letter-spacing: -0.015em;
-    line-height: 1.12;
-  }
-  .hero-badge-wrap {
-    gap: 0.4rem;
-  }
-  .mono-tag {
-    font-size: 0.68rem;
-  }
-  .hero-lead {
-    font-size: 0.88rem;
-    line-height: 1.5;
-  }
-  .hero-actions .btn-primary,
-  .hero-actions .btn-outline {
-    font-size: 0.74rem;
-    padding: 0.75rem 1rem;
-    letter-spacing: 0.08em;
-  }
-  .stat-value {
-    font-size: 1.3rem;
-  }
-  .stat-label {
-    font-size: 0.62rem;
-  }
-  .editorial-title {
-    font-size: 1.45rem;
-  }
-  .eng-editorial-title {
-    font-size: 1.45rem;
-  }
-  .structure-subheading {
-    font-size: 1.3rem;
-  }
-  .disciplines-selector {
-    grid-template-columns: 1fr;
-  }
-  .about-stat-highlight-card {
-    padding: 1rem 0.85rem;
-  }
-  .stat-highlight-num {
-    font-size: 2rem;
-  }
-  .stat-highlight-title {
-    font-size: 0.95rem;
-  }
-  .dimension-marker {
-    font-size: 0.56rem;
-  }
-  .dimension-marker span {
-    font-size: 0.56rem;
-  }
-  .brand-logo-img {
-    height: 28px;
-  }
-  .service-pillar-card {
-    padding: 1.25rem 0.85rem;
-  }
-  .wizard-container {
-    padding: 1.25rem 0.85rem;
-  }
-}
-
-/* ==========================================================================
    K.P. ARCHITECTS — ENGINEERING SKETCH VISUAL SYSTEM
    Source: 15th sep post kp.pdf (Drafting Grid, Vivid Orange, White Sketches, Load/Stress/Balance)
    ========================================================================== */
@@ -3500,5 +3090,643 @@ ul, ol {
   pointer-events: none;
 }
 
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (320px up to 1440px+)
+   Scoped strictly to mobile/tablet queries to preserve desktop integrity.
+   ========================================================================== */
 
+/* --------------------------------------------------------------------------
+   STANDARD DESKTOP (1025px – 1439px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1439px) {
+  .team-members-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
 
+/* --------------------------------------------------------------------------
+   LAPTOPS & DESKTOPS UP TO 1200px
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+  .hero-content-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-visual-frame {
+    max-width: 640px;
+    margin: 1.5rem auto 0;
+    width: 100%;
+  }
+  .capabilities-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .process-eng-progression {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .leaders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .team-members-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .footer-top-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLET LANDSCAPE & LARGE TABLETS (769px – 1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .structure-grid-layout {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+    margin-top: 2rem;
+  }
+  .wireframe-break-grid {
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+    padding: clamp(2rem, 4vw, 3rem) clamp(1.25rem, 3.5vw, 2rem);
+  }
+  .structure-principles-triad {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .structure-metrics-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+  }
+  .team-members-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .services-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+  .services-pillars-grid > *:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+  .about-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .process-eng-progression {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   NAVIGATION & MEDIUM SCREENS UP TO 992px
+   -------------------------------------------------------------------------- */
+@media (max-width: 992px) {
+  .nav-desktop {
+    display: none;
+  }
+  .mobile-toggle {
+    display: flex;
+  }
+  .hero-accent-block {
+    right: 0;
+    bottom: 0;
+  }
+  .hero-sketch-backdrop {
+    display: none;
+  }
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .story-item,
+  .story-item:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+  .story-item:nth-child(even) .story-media-wrap {
+    order: 0;
+  }
+  .process-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .contact-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+  .modal-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   TABLETS & PHABLETS (601px – 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  :root {
+    --header-height: 72px;
+    --container-pad: clamp(1rem, 3.5vw, 1.5rem);
+  }
+  .hero-headline {
+    font-size: clamp(1.65rem, 5.5vw, 2.35rem);
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .about-layout-grid {
+    gap: 2rem;
+  }
+  .about-main-heading {
+    font-size: clamp(1.45rem, 5.5vw, 2.4rem);
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+  .about-lead-statement {
+    font-size: clamp(0.95rem, 3vw, 1.15rem);
+  }
+  .about-stat-highlight-card {
+    padding: 1.5rem 1.25rem;
+  }
+  .about-disciplines-block {
+    padding: 1.25rem;
+  }
+  .about-disciplines-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .capabilities-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+  .process-grid {
+    grid-template-columns: 1fr;
+  }
+  .leaders-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .team-members-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .form-row-2col {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .disciplines-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-top-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .structure-principles-triad {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .structure-principle-card {
+    padding: 1.25rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .process-eng-progression {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .process-eng-progression > *:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  .structure-metrics-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 1rem;
+    margin-top: 2.25rem;
+    padding-top: 1.75rem;
+  }
+  .structure-metrics-strip > *:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+  .sketch-transition-inner {
+    justify-content: center;
+    text-align: center;
+  }
+  .wireframe-break-grid {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  .hero-bottom-bar {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  .hero-stats-strip {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 100%;
+    gap: 1.25rem 1rem;
+  }
+  .hero-scroll-prompt {
+    display: none;
+  }
+  .eng-editorial-title {
+    font-size: clamp(1.55rem, 5.5vw, 2.4rem);
+    line-height: 1.12;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+  .structure-subheading {
+    font-size: clamp(1.25rem, 4.8vw, 1.85rem);
+    line-height: 1.2;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   LARGE PHONES & MOBILE DEVICES (431px – 600px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 600px) {
+  .team-members-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+  .member-info {
+    padding: 0.85rem 0.75rem 0.95rem;
+    min-height: 106px;
+  }
+  .member-name {
+    font-size: 0.82rem;
+  }
+  .member-role {
+    font-size: 0.65rem;
+  }
+  .member-qual {
+    font-size: 0.62rem;
+  }
+  .services-pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .services-pillars-grid > *:last-child:nth-child(odd) {
+    grid-column: auto;
+    max-width: 100%;
+    margin: 0;
+  }
+  .service-pillar-card {
+    padding: clamp(1.25rem, 4vw, 1.75rem) clamp(1rem, 3.5vw, 1.25rem);
+  }
+  .hero-headline {
+    font-size: clamp(1.45rem, 6.2vw, 2.1rem);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .hero-lead {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.85rem;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-outline {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 0.85rem 1.25rem;
+    font-size: 0.78rem;
+  }
+  .work-header-row {
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .leaders-grid {
+    grid-template-columns: 1fr;
+  }
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+  .wizard-actions {
+    flex-direction: column-reverse;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  .wizard-actions button {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+  .modal-body {
+    padding: 1.25rem 1rem;
+    gap: 1.5rem;
+  }
+  .structure-grid-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 1.75rem;
+  }
+  .structure-drawing-frame {
+    padding: 1.25rem 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .structure-frame-header {
+    font-size: 0.65rem;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .wireframe-break-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: 1.5rem 1.15rem;
+  }
+  .wireframe-break-visual {
+    padding: 0.85rem;
+  }
+  .wireframe-visual-badge {
+    font-size: 0.62rem;
+    padding: 0.2rem 0.5rem;
+    top: 8px;
+    left: 8px;
+  }
+  .wireframe-progression-bar {
+    font-size: 0.68rem;
+    gap: 0.4rem 0.6rem;
+    padding-bottom: 0.6rem;
+  }
+  .wireframe-break-lead {
+    font-size: clamp(1.15rem, 4.8vw, 1.6rem);
+    line-height: 1.22;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+  .wireframe-break-text {
+    font-size: 0.88rem;
+    line-height: 1.6;
+  }
+  .process-eng-progression {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-top: 1.75rem;
+  }
+  .process-eng-progression > *:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+  .process-eng-card {
+    padding: 1.35rem 1.15rem;
+    gap: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .process-eng-title {
+    font-size: 1.15rem;
+  }
+  .process-eng-desc {
+    font-size: 0.8rem;
+    line-height: 1.55;
+  }
+  .process-themes-bar {
+    padding: 1.25rem 1rem;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   STANDARD MOBILE PHONES (376px – 480px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .team-members-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .member-info {
+    padding: 0.75rem 0.65rem 0.85rem;
+    min-height: 102px;
+  }
+  .hero-image-corner-tag {
+    top: 0.5rem;
+    left: 0.5rem;
+    font-size: 0.62rem;
+    padding: 0.25rem 0.5rem;
+  }
+  .hero-image-caption-bar {
+    padding: 1.25rem 0.75rem 0.75rem;
+  }
+  .hero-project-name {
+    font-size: 0.95rem;
+  }
+  .hero-project-loc {
+    font-size: 0.7rem;
+  }
+  .mobile-drawer {
+    max-width: 100%;
+    padding: calc(var(--header-height) + 1rem) 1.5rem 2rem;
+  }
+  .mobile-nav-link {
+    font-size: 1.25rem;
+  }
+  .brand-logo-img {
+    height: 32px;
+  }
+  .dimension-marker {
+    font-size: 0.62rem;
+  }
+  .wireframe-progression-bar {
+    font-size: 0.65rem;
+    gap: 0.35rem 0.5rem;
+  }
+  .wireframe-break-visual {
+    padding: 0.75rem;
+  }
+  .structure-metrics-strip {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  .structure-metrics-strip > *:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+  .struct-metric-num {
+    font-size: clamp(1.85rem, 7vw, 2.35rem);
+  }
+  .struct-metric-label {
+    font-size: 0.72rem;
+  }
+  .eng-editorial-title {
+    font-size: clamp(1.35rem, 5.8vw, 1.75rem);
+    line-height: 1.15;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+  .structure-subheading {
+    font-size: clamp(1.15rem, 5vw, 1.45rem);
+    line-height: 1.25;
+    letter-spacing: 0;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+  .structure-principle-card {
+    padding: 1.15rem 0.95rem;
+  }
+  .principle-title {
+    font-size: 1.05rem;
+  }
+  .principle-desc {
+    font-size: 0.78rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   SMALL MOBILE PHONES (320px – 375px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 375px) {
+  :root {
+    --header-height: 68px;
+    --container-pad: 0.9rem;
+  }
+  .team-members-grid {
+    grid-template-columns: 1fr;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 1.15rem;
+    margin-top: 1.75rem;
+  }
+  .member-info {
+    padding: 0.85rem 0.85rem 1rem;
+    min-height: auto;
+  }
+  .hero-headline {
+    font-size: clamp(1.25rem, 5.8vw, 1.55rem);
+    letter-spacing: -0.015em;
+    line-height: 1.12;
+  }
+  .hero-badge-wrap {
+    gap: 0.4rem;
+  }
+  .mono-tag {
+    font-size: 0.68rem;
+  }
+  .hero-lead {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .hero-actions .btn-primary,
+  .hero-actions .btn-outline {
+    font-size: 0.74rem;
+    padding: 0.75rem 1rem;
+    letter-spacing: 0.08em;
+  }
+  .stat-value {
+    font-size: 1.3rem;
+  }
+  .stat-label {
+    font-size: 0.62rem;
+  }
+  .editorial-title {
+    font-size: 1.35rem;
+  }
+  .eng-editorial-title {
+    font-size: 1.25rem;
+    line-height: 1.18;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+  .structure-subheading {
+    font-size: 1.1rem;
+    line-height: 1.25;
+    word-break: normal;
+    overflow-wrap: normal;
+    hyphens: none;
+    text-wrap: balance;
+  }
+  .disciplines-selector {
+    grid-template-columns: 1fr;
+  }
+  .about-stat-highlight-card {
+    padding: 1rem 0.85rem;
+  }
+  .stat-highlight-num {
+    font-size: 1.85rem;
+  }
+  .stat-highlight-title {
+    font-size: 0.9rem;
+  }
+  .dimension-marker {
+    font-size: 0.56rem;
+  }
+  .dimension-marker span {
+    font-size: 0.56rem;
+  }
+  .brand-logo-img {
+    height: 28px;
+  }
+  .service-pillar-card {
+    padding: 1.25rem 0.85rem;
+  }
+  .wizard-container {
+    padding: 1.25rem 0.85rem;
+  }
+  .wireframe-break-grid {
+    padding: 1.25rem 0.85rem;
+    gap: 1.5rem;
+  }
+  .wireframe-visual-badge {
+    font-size: 0.58rem;
+    padding: 0.2rem 0.4rem;
+  }
+  .wireframe-progression-bar {
+    font-size: 0.62rem;
+    gap: 0.35rem 0.5rem;
+  }
+  .wireframe-break-lead {
+    font-size: 1.1rem;
+  }
+  .wireframe-break-text {
+    font-size: 0.84rem;
+  }
+  .structure-drawing-frame {
+    padding: 1rem 0.75rem;
+  }
+  .structure-frame-header {
+    font-size: 0.6rem;
+  }
+  .process-eng-card {
+    padding: 1.15rem 0.95rem;
+  }
+  .process-eng-title {
+    font-size: 1.05rem;
+  }
+  .process-eng-desc {
+    font-size: 0.78rem;
+  }
+}
