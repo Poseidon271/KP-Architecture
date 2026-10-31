@@ -290,7 +290,7 @@ function renderServices() {
           <span class="sketch-corner-tick tick-tr"></span>
           <span class="sketch-corner-tick tick-bl"></span>
           <span class="sketch-corner-tick tick-br"></span>
-          <img src="${sketchMap[s.num] || '/assets/sketch_assets/lineart_page_1.webp'}" alt="${s.title} Technical Sketch" loading="lazy" />
+          <img src="${s.image || sketchMap[s.num] || '/assets/sketch_assets/lineart_page_1.webp'}" alt="${s.title} Technical Sketch" loading="lazy" onerror="this.onerror=null; this.src='/assets/sketch_assets/lineart_page_1.webp';" />
         </div>
 
         <div class="dimension-marker" style="margin-bottom: 1rem;">
